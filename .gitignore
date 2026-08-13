@@ -1,0 +1,41 @@
+# Active agent workflow artifacts and local design material
+.agent-work/
+
+# Secrets and environment-local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Browser sessions and machine-local automation state
+.auth/
+.browser-data/
+browser-data/
+user-data/
+playwright/.cache/
+.cache/ms-playwright/
+
+# Dependencies and generated output
+node_modules/
+dist/
+build/
+coverage/
+.cache/
+tmp/
+output/
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Editors and operating systems
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Do not ignore /evidence/; genuine submission evidence must be tracked later.

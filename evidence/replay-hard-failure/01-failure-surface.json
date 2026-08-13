@@ -1,0 +1,18 @@
+{
+  "url": "http://127.0.0.1:51827/backoffice/members/[REDACTED]/accounts/new",
+  "title": "Permission denied · Harborline CU Operations",
+  "visibleText": "Harborline CU Operations Member servicing workstation Training environment online SIMULATION ONLY — all members, accounts, and outcomes on this local application are synthetic. SUB-ACCOUNT PREPARATION Find member Review member Prepare account Review change Permission denied This operator cannot prepare a new sub-account for Member ••4030. Stop and route the failure for review. Return to member details Harborline demonstration system · No real institution, member, or financial data.",
+  "semanticTree": "a[role=implicit] label=\"\" value=\"\" disabled=false",
+  "controls": [
+    {
+      "tag": "a",
+      "role": null,
+      "label": "",
+      "value": "",
+      "disabled": false
+    }
+  ],
+  "screenshotDataUrl": "[OMITTED_FROM_PERSISTED_SNAPSHOT]",
+  "screenshotPath": "evidence/replay-hard-failure/01-failure.png",
+  "stepCount": 1
+}

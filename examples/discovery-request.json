@@ -1,0 +1,53 @@
+{
+  "goal": "Prepare a Savings Plus sub-account with nickname Discovery Sample for the supplied synthetic member and stop at review.",
+  "target": {
+    "entryUrl": "http://127.0.0.1:4317/backoffice/members/search",
+    "appFamily": "synthetic-credit-union",
+    "variant": "base"
+  },
+  "inputs": {
+    "memberId": {
+      "type": "string",
+      "value": "M-1001",
+      "required": true,
+      "sensitive": true,
+      "description": "Synthetic member identifier. Persisted evidence redacts this value."
+    },
+    "productCode": {
+      "type": "string",
+      "value": "SAV_PLUS",
+      "required": true,
+      "allowedValues": ["SAV_PLUS", "MONEY_MARKET"],
+      "description": "Synthetic product code."
+    },
+    "nickname": {
+      "type": "string",
+      "value": "Discovery Sample",
+      "required": true,
+      "description": "Synthetic nickname shown at review."
+    }
+  },
+  "desiredOutputs": {
+    "status": {
+      "type": "string",
+      "description": "Review readiness state."
+    },
+    "memberReference": {
+      "type": "string",
+      "sensitive": true,
+      "description": "Redacted synthetic member reference shown at review."
+    },
+    "productCode": {
+      "type": "string",
+      "description": "Prepared product code."
+    },
+    "productName": {
+      "type": "string",
+      "description": "Prepared product display name."
+    },
+    "nickname": {
+      "type": "string",
+      "description": "Prepared account nickname."
+    }
+  }
+}

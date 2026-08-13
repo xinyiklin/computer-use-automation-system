@@ -1,0 +1,15 @@
+{
+  "status": "failure",
+  "runId": "replay-policy-block",
+  "capabilityId": "prepare-subaccount",
+  "error": {
+    "category": "policy",
+    "code": "POLICY_RISK_BLOCKED",
+    "message": "Risk class is blocked: irreversible",
+    "stepId": "confirm-account",
+    "observed": "irreversible",
+    "evidencePaths": [
+      "evidence/replay-policy-block/01-failure.png"
+    ]
+  }
+}

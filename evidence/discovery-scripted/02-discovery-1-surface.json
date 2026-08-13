@@ -1,0 +1,25 @@
+{
+  "url": "http://127.0.0.1:51827/backoffice/members/search",
+  "title": "Member search · Harborline CU Operations",
+  "visibleText": "Harborline CU Operations Member servicing workstation Training environment online SIMULATION ONLY — all members, accounts, and outcomes on this local application are synthetic. SUB-ACCOUNT PREPARATION Find member Review member Prepare account Review change Find a member Enter a synthetic member identifier to begin a bounded account-preparation workflow. Member lookup Member ID Examples: [REDACTED], M-1002, M-4040, M-4290, M-4030, M-7000 Search members Harborline demonstration system · No real institution, member, or financial data.",
+  "semanticTree": "input[role=implicit] label=\"Member ID\" value=\"\" disabled=false\nbutton[role=implicit] label=\"\" value=\"\" disabled=false",
+  "controls": [
+    {
+      "tag": "input",
+      "role": null,
+      "label": "Member ID",
+      "value": "",
+      "disabled": false
+    },
+    {
+      "tag": "button",
+      "role": null,
+      "label": "",
+      "value": "",
+      "disabled": false
+    }
+  ],
+  "screenshotDataUrl": "[OMITTED_FROM_PERSISTED_SNAPSHOT]",
+  "screenshotPath": "evidence/discovery-scripted/02-discovery-1.png",
+  "stepCount": 2
+}

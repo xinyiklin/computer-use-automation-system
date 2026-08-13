@@ -1,0 +1,12 @@
+{
+  "status": "success",
+  "runId": "replay-recovery",
+  "capabilityId": "prepare-subaccount",
+  "outputs": {
+    "status": "ready_for_review",
+    "memberReference": "Member ••4290",
+    "productCode": "SAV_PLUS",
+    "productName": "Savings Plus",
+    "nickname": "Recovery Sample"
+  }
+}

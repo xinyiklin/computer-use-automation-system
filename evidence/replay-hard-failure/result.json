@@ -1,0 +1,33 @@
+{
+  "status": "failure",
+  "runId": "replay-hard-failure",
+  "capabilityId": "prepare-subaccount",
+  "error": {
+    "category": "hard_failure",
+    "code": "PERMISSION_DENIED",
+    "message": "The application reported a hard failure: PERMISSION_DENIED",
+    "stepId": "open-subaccount",
+    "expected": {
+      "kind": "visible",
+      "target": {
+        "description": "prepare new sub-account heading",
+        "robustnessNote": "Page heading is the stable resume and checkpoint landmark.",
+        "candidates": [
+          {
+            "kind": "role",
+            "role": "heading",
+            "name": "Prepare new sub-account",
+            "exact": true
+          }
+        ],
+        "expectedCardinality": 1
+      }
+    },
+    "observed": {
+      "failureCode": "PERMISSION_DENIED"
+    },
+    "evidencePaths": [
+      "evidence/replay-hard-failure/01-failure.png"
+    ]
+  }
+}

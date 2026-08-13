@@ -1,0 +1,99 @@
+{
+  "generatedAt": "2026-08-13T22:14:14.424Z",
+  "note": "All runs are local, synthetic, and key-free. discovery-scripted is explicitly a test-double run, not genuine LLM evidence.",
+  "modelDecisionCallsDuringReplay": 0,
+  "serverConfirmAttempts": 0,
+  "results": {
+    "discoveryScripted": "success",
+    "replaySuccess": {
+      "status": "success",
+      "runId": "replay-success",
+      "capabilityId": "prepare-subaccount",
+      "outputs": {
+        "status": "ready_for_review",
+        "memberReference": "Member ••1002",
+        "productCode": "MONEY_MARKET",
+        "productName": "Money Market",
+        "nickname": "Rainy Day"
+      }
+    },
+    "businessOutcome": {
+      "status": "business_outcome",
+      "runId": "replay-business-outcome",
+      "capabilityId": "prepare-subaccount",
+      "code": "MEMBER_NOT_FOUND"
+    },
+    "recovery": {
+      "status": "success",
+      "runId": "replay-recovery",
+      "capabilityId": "prepare-subaccount",
+      "outputs": {
+        "status": "ready_for_review",
+        "memberReference": "Member ••4290",
+        "productCode": "SAV_PLUS",
+        "productName": "Savings Plus",
+        "nickname": "Recovery Sample"
+      }
+    },
+    "hardFailure": {
+      "status": "failure",
+      "runId": "replay-hard-failure",
+      "capabilityId": "prepare-subaccount",
+      "error": {
+        "category": "hard_failure",
+        "code": "PERMISSION_DENIED",
+        "message": "The application reported a hard failure: PERMISSION_DENIED",
+        "stepId": "open-subaccount",
+        "expected": {
+          "kind": "visible",
+          "target": {
+            "description": "prepare new sub-account heading",
+            "robustnessNote": "Page heading is the stable resume and checkpoint landmark.",
+            "candidates": [
+              {
+                "kind": "role",
+                "role": "heading",
+                "name": "Prepare new sub-account",
+                "exact": true
+              }
+            ],
+            "expectedCardinality": 1
+          }
+        },
+        "observed": {
+          "failureCode": "PERMISSION_DENIED"
+        },
+        "evidencePaths": [
+          "evidence/replay-hard-failure/01-failure.png"
+        ]
+      }
+    },
+    "handoff": {
+      "status": "success",
+      "runId": "human-handoff-automated",
+      "capabilityId": "prepare-subaccount",
+      "outputs": {
+        "status": "ready_for_review",
+        "memberReference": "Member ••7000",
+        "productCode": "SAV_PLUS",
+        "productName": "Savings Plus",
+        "nickname": "Supervisor Sample"
+      }
+    },
+    "policyBlock": {
+      "status": "failure",
+      "runId": "replay-policy-block",
+      "capabilityId": "prepare-subaccount",
+      "error": {
+        "category": "policy",
+        "code": "POLICY_RISK_BLOCKED",
+        "message": "Risk class is blocked: irreversible",
+        "stepId": "confirm-account",
+        "observed": "irreversible",
+        "evidencePaths": [
+          "evidence/replay-policy-block/01-failure.png"
+        ]
+      }
+    }
+  }
+}

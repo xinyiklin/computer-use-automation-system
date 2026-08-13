@@ -1,0 +1,505 @@
+{
+  "schemaVersion": "1.0",
+  "capability": {
+    "id": "prepare-subaccount",
+    "name": "Prepare synthetic member sub-account",
+    "version": 1,
+    "description": "Prepare a Savings Plus sub-account with nickname Discovery Sample for synthetic member [REDACTED] and stop at review.",
+    "riskClass": "review_only"
+  },
+  "compatibility": {
+    "surfaceKind": "web",
+    "appFamily": "synthetic-credit-union",
+    "variant": "base",
+    "allowedOrigins": [
+      "http://127.0.0.1:51827"
+    ],
+    "entryRoutePattern": "^/backoffice/members/search$",
+    "requiredLandmarks": [
+      {
+        "kind": "visible",
+        "target": {
+          "description": "member ID field",
+          "robustnessNote": "Associated label is stable operator-facing language.",
+          "candidates": [
+            {
+              "kind": "label",
+              "text": "Member ID",
+              "exact": true
+            },
+            {
+              "kind": "role",
+              "role": "textbox",
+              "name": "Member ID",
+              "exact": true
+            }
+          ],
+          "expectedCardinality": 1
+        }
+      }
+    ]
+  },
+  "inputSchema": {
+    "memberId": "[REDACTED]",
+    "productCode": {
+      "type": "string",
+      "required": true,
+      "description": "Synthetic product code.",
+      "allowedValues": [
+        "SAV_PLUS",
+        "MONEY_MARKET"
+      ]
+    },
+    "nickname": {
+      "type": "string",
+      "required": true,
+      "description": "Synthetic review nickname."
+    }
+  },
+  "outputSchema": {
+    "status": {
+      "type": "string",
+      "description": "Review readiness state."
+    },
+    "memberReference": {
+      "type": "string",
+      "sensitive": true,
+      "description": "Redacted synthetic member reference shown at review."
+    },
+    "productCode": {
+      "type": "string",
+      "description": "Prepared product code."
+    },
+    "productName": {
+      "type": "string",
+      "description": "Prepared product display name."
+    },
+    "nickname": {
+      "type": "string",
+      "description": "Prepared account nickname."
+    }
+  },
+  "outputBindings": {
+    "status": {
+      "kind": "literal",
+      "value": "ready_for_review"
+    },
+    "memberReference": {
+      "kind": "scalar",
+      "source": {
+        "description": "prepared member reference value",
+        "robustnessNote": "Value is adjacent to the stable row heading rather than tied to a DOM index.",
+        "candidates": [
+          {
+            "kind": "relative",
+            "anchorText": "Member reference",
+            "relation": "following",
+            "elementHint": "td"
+          }
+        ],
+        "expectedCardinality": 1
+      },
+      "parseAs": "string",
+      "sensitive": true
+    },
+    "productCode": {
+      "kind": "scalar",
+      "source": {
+        "description": "prepared product code value",
+        "robustnessNote": "Value is adjacent to the stable row heading rather than tied to a DOM index.",
+        "candidates": [
+          {
+            "kind": "relative",
+            "anchorText": "Product code",
+            "relation": "following",
+            "elementHint": "td"
+          }
+        ],
+        "expectedCardinality": 1
+      },
+      "parseAs": "string"
+    },
+    "productName": {
+      "kind": "scalar",
+      "source": {
+        "description": "prepared product name value",
+        "robustnessNote": "Value is adjacent to the stable row heading rather than tied to a DOM index.",
+        "candidates": [
+          {
+            "kind": "relative",
+            "anchorText": "Product name",
+            "relation": "following",
+            "elementHint": "td"
+          }
+        ],
+        "expectedCardinality": 1
+      },
+      "parseAs": "string"
+    },
+    "nickname": {
+      "kind": "scalar",
+      "source": {
+        "description": "prepared nickname value",
+        "robustnessNote": "Value is adjacent to the stable row heading rather than tied to a DOM index.",
+        "candidates": [
+          {
+            "kind": "relative",
+            "anchorText": "Nickname",
+            "relation": "following",
+            "elementHint": "td"
+          }
+        ],
+        "expectedCardinality": 1
+      },
+      "parseAs": "string"
+    }
+  },
+  "steps": [
+    {
+      "id": "navigate-search",
+      "description": "Open the permitted member-search entry point.",
+      "riskClass": "safe",
+      "checkpoint": {
+        "kind": "visible",
+        "target": {
+          "description": "member ID field",
+          "robustnessNote": "Associated label is stable operator-facing language.",
+          "candidates": [
+            {
+              "kind": "label",
+              "text": "Member ID",
+              "exact": true
+            },
+            {
+              "kind": "role",
+              "role": "textbox",
+              "name": "Member ID",
+              "exact": true
+            }
+          ],
+          "expectedCardinality": 1
+        }
+      },
+      "kind": "navigate",
+      "url": {
+        "kind": "literal",
+        "value": "http://127.0.0.1:51827/backoffice/members/search"
+      }
+    },
+    {
+      "id": "fill-member-id",
+      "description": "Enter the invocation's synthetic member ID.",
+      "riskClass": "reversible",
+      "kind": "fill",
+      "target": {
+        "description": "member ID field",
+        "robustnessNote": "Associated label is stable operator-facing language.",
+        "candidates": [
+          {
+            "kind": "label",
+            "text": "Member ID",
+            "exact": true
+          },
+          {
+            "kind": "role",
+            "role": "textbox",
+            "name": "Member ID",
+            "exact": true
+          }
+        ],
+        "expectedCardinality": 1
+      },
+      "value": {
+        "kind": "input",
+        "name": "memberId"
+      }
+    },
+    {
+      "id": "search-member",
+      "description": "Search for the synthetic member.",
+      "riskClass": "safe",
+      "checkpoint": {
+        "kind": "visible",
+        "target": {
+          "description": "member details heading",
+          "robustnessNote": "Page heading is the stable state landmark.",
+          "candidates": [
+            {
+              "kind": "role",
+              "role": "heading",
+              "name": "Member details",
+              "exact": true
+            }
+          ],
+          "expectedCardinality": 1
+        }
+      },
+      "retryPolicy": {
+        "maxAttempts": 2,
+        "conditionCodes": [
+          "TRANSIENT_LOAD_TIMEOUT"
+        ],
+        "strategy": "reload",
+        "delayMs": 100
+      },
+      "kind": "click",
+      "target": {
+        "description": "search members action",
+        "robustnessNote": "Button role and exact accessible name express intent.",
+        "candidates": [
+          {
+            "kind": "role",
+            "role": "button",
+            "name": "Search members",
+            "exact": true
+          },
+          {
+            "kind": "text",
+            "text": "Search members",
+            "exact": true
+          }
+        ],
+        "expectedCardinality": 1
+      }
+    },
+    {
+      "id": "open-subaccount",
+      "description": "Open the new sub-account preparation form.",
+      "riskClass": "review_only",
+      "checkpoint": {
+        "kind": "visible",
+        "target": {
+          "description": "prepare new sub-account heading",
+          "robustnessNote": "Page heading is the stable resume and checkpoint landmark.",
+          "candidates": [
+            {
+              "kind": "role",
+              "role": "heading",
+              "name": "Prepare new sub-account",
+              "exact": true
+            }
+          ],
+          "expectedCardinality": 1
+        }
+      },
+      "kind": "click",
+      "target": {
+        "description": "open new sub-account action",
+        "robustnessNote": "Link role and exact product-language name remain stable across layout changes.",
+        "candidates": [
+          {
+            "kind": "role",
+            "role": "link",
+            "name": "Open new sub-account",
+            "exact": true
+          },
+          {
+            "kind": "text",
+            "text": "Open new sub-account",
+            "exact": true
+          }
+        ],
+        "expectedCardinality": 1
+      }
+    },
+    {
+      "id": "select-product",
+      "description": "Choose the invocation's product code.",
+      "riskClass": "reversible",
+      "kind": "select",
+      "target": {
+        "description": "product selector",
+        "robustnessNote": "Associated label identifies the business field.",
+        "candidates": [
+          {
+            "kind": "label",
+            "text": "Product",
+            "exact": true
+          },
+          {
+            "kind": "role",
+            "role": "combobox",
+            "name": "Product",
+            "exact": true
+          }
+        ],
+        "expectedCardinality": 1
+      },
+      "value": {
+        "kind": "input",
+        "name": "productCode"
+      }
+    },
+    {
+      "id": "fill-nickname",
+      "description": "Enter the invocation's synthetic nickname.",
+      "riskClass": "reversible",
+      "kind": "fill",
+      "target": {
+        "description": "account nickname field",
+        "robustnessNote": "Associated label identifies the business field.",
+        "candidates": [
+          {
+            "kind": "label",
+            "text": "Account nickname",
+            "exact": true
+          },
+          {
+            "kind": "role",
+            "role": "textbox",
+            "name": "Account nickname",
+            "exact": true
+          }
+        ],
+        "expectedCardinality": 1
+      },
+      "value": {
+        "kind": "input",
+        "name": "nickname"
+      }
+    },
+    {
+      "id": "open-review",
+      "description": "Submit the reversible form and reach review.",
+      "riskClass": "review_only",
+      "checkpoint": {
+        "kind": "visible",
+        "target": {
+          "description": "review new sub-account heading",
+          "robustnessNote": "Heading verifies the review state.",
+          "candidates": [
+            {
+              "kind": "role",
+              "role": "heading",
+              "name": "Review new sub-account",
+              "exact": true
+            }
+          ],
+          "expectedCardinality": 1
+        }
+      },
+      "kind": "click",
+      "target": {
+        "description": "review new sub-account action",
+        "robustnessNote": "Button role and exact name express intent.",
+        "candidates": [
+          {
+            "kind": "role",
+            "role": "button",
+            "name": "Review new sub-account",
+            "exact": true
+          }
+        ],
+        "expectedCardinality": 1
+      }
+    }
+  ],
+  "businessOutcomes": [
+    {
+      "code": "MEMBER_NOT_FOUND",
+      "description": "The synthetic application returned no matching member.",
+      "when": {
+        "kind": "visible",
+        "target": {
+          "description": "member-not-found outcome",
+          "robustnessNote": "Visible business language is the domain outcome.",
+          "candidates": [
+            {
+              "kind": "role",
+              "role": "heading",
+              "name": "Member not found",
+              "exact": true
+            }
+          ],
+          "expectedCardinality": 1
+        }
+      }
+    }
+  ],
+  "success": {
+    "kind": "all",
+    "conditions": [
+      {
+        "kind": "url_matches",
+        "pattern": "/accounts/new/review$"
+      },
+      {
+        "kind": "visible",
+        "target": {
+          "description": "review new sub-account heading",
+          "robustnessNote": "Heading verifies the review state.",
+          "candidates": [
+            {
+              "kind": "role",
+              "role": "heading",
+              "name": "Review new sub-account",
+              "exact": true
+            }
+          ],
+          "expectedCardinality": 1
+        }
+      },
+      {
+        "kind": "visible",
+        "target": {
+          "description": "confirm account creation action",
+          "robustnessNote": "Exact accessible name identifies the irreversible control for policy blocking.",
+          "candidates": [
+            {
+              "kind": "role",
+              "role": "button",
+              "name": "Confirm account creation",
+              "exact": true
+            }
+          ],
+          "expectedCardinality": 1
+        }
+      },
+      {
+        "kind": "value_equals",
+        "target": {
+          "description": "prepared product code value",
+          "robustnessNote": "Value is adjacent to the stable row heading rather than tied to a DOM index.",
+          "candidates": [
+            {
+              "kind": "relative",
+              "anchorText": "Product code",
+              "relation": "following",
+              "elementHint": "td"
+            }
+          ],
+          "expectedCardinality": 1
+        },
+        "value": {
+          "kind": "input",
+          "name": "productCode"
+        }
+      },
+      {
+        "kind": "value_equals",
+        "target": {
+          "description": "prepared nickname value",
+          "robustnessNote": "Value is adjacent to the stable row heading rather than tied to a DOM index.",
+          "candidates": [
+            {
+              "kind": "relative",
+              "anchorText": "Nickname",
+              "relation": "following",
+              "elementHint": "td"
+            }
+          ],
+          "expectedCardinality": 1
+        },
+        "value": {
+          "kind": "input",
+          "name": "nickname"
+        }
+      }
+    ]
+  },
+  "provenance": {
+    "discoveryRunId": "discovery-scripted",
+    "createdAt": "2026-08-13T22:14:08.395Z",
+    "modelIdentifier": "scripted-model-test-double"
+  }
+}

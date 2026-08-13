@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.cache/
+.agent-work/
+evidence/**/*.jsonl
+evidence/**/*.json
+artifacts/*.json
+ASSIGNMENT.md

@@ -1,0 +1,12 @@
+{
+  "status": "success",
+  "runId": "replay-success",
+  "capabilityId": "prepare-subaccount",
+  "outputs": {
+    "status": "ready_for_review",
+    "memberReference": "Member ••1002",
+    "productCode": "MONEY_MARKET",
+    "productName": "Money Market",
+    "nickname": "Rainy Day"
+  }
+}

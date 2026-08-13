@@ -1,0 +1,12 @@
+{
+  "status": "success",
+  "runId": "human-handoff-automated",
+  "capabilityId": "prepare-subaccount",
+  "outputs": {
+    "status": "ready_for_review",
+    "memberReference": "Member ••7000",
+    "productCode": "SAV_PLUS",
+    "productName": "Savings Plus",
+    "nickname": "Supervisor Sample"
+  }
+}
