@@ -5,8 +5,7 @@ assignment. Product Brief `001` v1 as amended by `CR001` v1 Option A and
 Delivery Plan `001` v2 are approved.
 The approved baseline and no-key verification are implemented; genuine model
 discovery and person-operated same-session handoff receipts are captured.
-Independent final working-tree verification passed; exact-head publication
-remains pending.
+Independent final verification and exact-head publication are complete.
 
 `AGENTS.md` is the provider-neutral project guide. Keep it concise and route to
 the owning source instead of copying large source or planning documents here.
@@ -27,7 +26,7 @@ the original PDF wins over `ASSIGNMENT.md`.
 ## Current Stage
 
 - Task: `[TASK 001]`.
-- Stage: approved discovery-transport expansion; implementation, required live evidence, and independent exact-tree verification are complete, while publication is pending.
+- Stage: `[TASK 001]` implementation, required live evidence, independent verification, and publication are complete.
 - Product scope: Product Brief v1 as amended by `CR001` v1 Option A, jointly approved by the user on 2026-08-13.
 - Delivery Plan: v2 jointly approved by the user on 2026-08-13; it supersedes v1.
 - Alignment Review: durable state records that Delivery Plan v2 was aligned with Product Brief v1 as amended by `CR001` v1 Option A. The exact ignored review is absent, so the current verifier could not independently re-evaluate that alignment.
@@ -37,9 +36,10 @@ the original PDF wins over `ASSIGNMENT.md`.
 - Genuine selected-backend discovery: verified in `discovery-2026-08-16T23-12-04-329Z-7439cb4f` with the contained `codex-cli:gpt-5.6-luna` transport at xhigh and eight concrete external-process receipts; its exact persisted-file-byte SHA-256 `6b579c4bb9e05826855f83ca91a18942af95c8f3cc466950e5d8e7322fd75a39` is linked to the different-input, model-free replay `replay-2026-08-16T23-17-24-561Z-7432e8b8`.
 - Person-operated same-session handoff: verified in `replay-2026-08-16T23-17-36-117Z-37f35130` with a headed surface, trusted person-operated CLI mode, one unchanged surface-session ID, a person-reported action description `Clicked "Supervisor verified"`, independently verified resume state, and successful completion.
 - Independent final verification: no application defects found; assignment sections 3.1–3.7 passed. Private-plan alignment remains unverified because the exact ignored planning artifacts are absent.
+- Publication: PR `#1` squash-merged reviewed head `2fa1a124075c1c0f77865162b3c24716e7999f3b` to `main` as `1803ecea046beb42cec016decc7dcd2afd7ceb80`; the merged tree is identical to the reviewed tree. GitHub had no configured CI workflows, commit statuses, branch protection, or unresolved review threads.
 
-Do not describe the assignment as fully published until the reviewed exact head
-passes PR/CI checks and is merged.
+Treat `[TASK 001]` as complete and published. Further user-facing behavior
+requires newly approved scope or a documented Change Request.
 
 ## Ownership Map
 

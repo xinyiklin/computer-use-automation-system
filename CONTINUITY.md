@@ -12,9 +12,10 @@
 - Independent post-fix confirmation: eleven earlier verifier passes surfaced sixty-six findings or limitations. Executable defects were remediated with focused regressions, including scalar-output scope, popup navigation, hard-deadline cleanup, live discovery identity, concrete transport attestation, exact persisted-byte replay provenance, caller sanitization, and cleanup independence. A twelfth, final exact-tree verifier found no application defects and passed assignment sections 3.1–3.7. The exact ignored planning artifacts remain unavailable in this clone, and the person-operated action is intentionally represented as a person-reported description plus independently observed same-session resume state.
 - Genuine discovery receipt: `evidence/discovery-2026-08-16T23-12-04-329Z-7439cb4f/` was produced by the explicitly selected, tool-disabled `codex-cli:gpt-5.6-luna` transport at xhigh with generic region-aware guidance, verified live identity, engine-owned value redaction, independently configured policy, and eight concrete external-process receipts from the registered built-in runner; its exact persisted-file-byte SHA-256 `6b579c4bb9e05826855f83ca91a18942af95c8f3cc466950e5d8e7322fd75a39` is linked to the model-free different-input replay `replay-2026-08-16T23-17-24-561Z-7432e8b8` with no raw sensitive member input.
 - Person-operated handoff receipt: `evidence/replay-2026-08-16T23-17-36-117Z-37f35130/` links the same exact file-byte digest and records `automation → human → automation`, trusted `person-operated-cli` execution on a headed surface, one unchanged surface-session ID, the person-reported description `Clicked "Supervisor verified"`, independently verified resume state, successful review output, and no confirmation action on the current source.
-- Required live evidence is present, including the exact-byte-bound discovery refresh without app-specific prompt landmarks; evidence curation and independent final verification are complete, while exact-head PR/CI and merge checks remain pending.
+- Required live evidence is present, including the exact-byte-bound discovery refresh without app-specific prompt landmarks; evidence curation and independent final verification are complete.
+- Publication receipt: PR `#1` squash-merged exact reviewed head `2fa1a124075c1c0f77865162b3c24716e7999f3b` to `main` as `1803ecea046beb42cec016decc7dcd2afd7ceb80` at `2026-08-16T23:50:55Z`. Immediately before merge, GitHub returned `mergeable: true`, `draft: false`, an empty review-thread list, no workflow runs, and no commit statuses; the main-branch protection query returned `Branch not protected`. Post-merge `git pull --ff-only origin main` advanced local `main` from `97ea610992e43532e197a1884f15e46ae2f7220d` to `1803ecea046beb42cec016decc7dcd2afd7ceb80`; the reviewed and merged tree IDs both equal `411bf51691688c6a9aa50aadd967bf1e8b94a484`, and the local and remote feature refs were removed.
 - No provider credentials, raw transcripts, or real data were persisted; the genuine run used only the synthetic target and sanitized evidence.
-- `.agent-work/` remains local and ignored while the workflow is active.
+- `.agent-work/` remains local and ignored by design.
 - The exact ignored Product Brief, Delivery Plan, and Alignment Review files are absent from this clone. Their approval/version record above is durable, but plan-to-implementation alignment must remain unverified unless the originals are restored.
 
 ## Implemented Baseline
@@ -57,8 +58,8 @@
 
 ## Immediate Next Actions
 
-1. Commit and push the independently reviewed tree, then open the PR.
-2. Verify exact PR head, green CI, mergeability, and resolved review threads; merge only if all pass, then perform post-merge verification.
+1. No remaining action for `[TASK 001]`; retain the evidence and publication receipts.
+2. Start newly approved scope or a documented Change Request before further user-facing behavior changes.
 
 ## Scope And Invariants
 
