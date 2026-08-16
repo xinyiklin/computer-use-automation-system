@@ -1,0 +1,59 @@
+{
+  "url": "http://127.0.0.1:4317/backoffice/members/search",
+  "title": "Member search · Harborline CU Operations",
+  "visibleText": "Find a member Enter a synthetic member identifier to begin a bounded account-preparation workflow. Member lookup Member ID Examples: [REDACTED], M-1002, M-4040, M-4290, M-4030, M-7000 Search members",
+  "semanticTree": "region=header h1[role=heading] name=\"Harborline CU OperationsMember servicing workstation\" value=\"\" disabled=false\nregion=navigation h2[role=heading] name=\"Sub-account preparation\" value=\"\" disabled=false\nregion=main h1[role=heading] name=\"Find a member\" value=\"\" disabled=false\nregion=main h2[role=heading] name=\"Member lookup\" value=\"\" disabled=false\nregion=main input[role=textbox] name=\"Member ID\" value=\"\" disabled=false\nregion=main button[role=button] name=\"Search members\" value=\"\" disabled=false",
+  "controls": [
+    {
+      "region": "header",
+      "tag": "h1",
+      "role": "heading",
+      "label": "Harborline CU OperationsMember servicing workstation",
+      "value": "",
+      "disabled": false
+    },
+    {
+      "region": "navigation",
+      "tag": "h2",
+      "role": "heading",
+      "label": "Sub-account preparation",
+      "value": "",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "h1",
+      "role": "heading",
+      "label": "Find a member",
+      "value": "",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "h2",
+      "role": "heading",
+      "label": "Member lookup",
+      "value": "",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "input",
+      "role": "textbox",
+      "label": "Member ID",
+      "value": "",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "button",
+      "role": "button",
+      "label": "Search members",
+      "value": "",
+      "disabled": false
+    }
+  ],
+  "screenshotDataUrl": "[OMITTED_FROM_PERSISTED_SNAPSHOT]",
+  "screenshotPath": "evidence/discovery-2026-08-16T23-12-04-329Z-7439cb4f/02-discovery-1.png",
+  "stepCount": 2
+}

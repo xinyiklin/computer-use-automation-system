@@ -1,9 +1,12 @@
 # Project Agent Guide
 
 This repository is the interface.ai Computer-Use Automation System take-home
-assignment. Product Brief `001` v1 and Delivery Plan `001` v1 are approved.
+assignment. Product Brief `001` v1 as amended by `CR001` v1 Option A and
+Delivery Plan `001` v2 are approved.
 The approved baseline and no-key verification are implemented; genuine model
-discovery and a person-operated handoff remain external evidence prerequisites.
+discovery and person-operated same-session handoff receipts are captured.
+Independent final working-tree verification passed; exact-head publication
+remains pending.
 
 `AGENTS.md` is the provider-neutral project guide. Keep it concise and route to
 the owning source instead of copying large source or planning documents here.
@@ -24,18 +27,19 @@ the original PDF wins over `ASSIGNMENT.md`.
 ## Current Stage
 
 - Task: `[TASK 001]`.
-- Stage: approved discovery-transport expansion; v2 implementation not started.
+- Stage: approved discovery-transport expansion; implementation, required live evidence, and independent exact-tree verification are complete, while publication is pending.
 - Product scope: Product Brief v1 as amended by `CR001` v1 Option A, jointly approved by the user on 2026-08-13.
 - Delivery Plan: v2 jointly approved by the user on 2026-08-13; it supersedes v1.
-- Alignment Review: Delivery Plan v2 is aligned with Product Brief v1 as amended by `CR001` v1 Option A.
+- Alignment Review: durable state records that Delivery Plan v2 was aligned with Product Brief v1 as amended by `CR001` v1 Option A. The exact ignored review is absent, so the current verifier could not independently re-evaluate that alignment.
 - Baseline implementation: executed within the prior approved scope; see the Implementation Report.
-- V2 implementation: not started.
-- Automated and clean-copy no-key gates: passed 23/23 tests.
-- Genuine selected-backend discovery: unverified; no provider was called while drafting or approving v2.
-- Person-operated same-session handoff: unverified pending user participation.
+- V2 implementation: transport slice, required live evidence, and independent working-tree confirmation are complete.
+- Full local and isolated clean-copy gates: passed 93/93 tests on Node 24.19.0; no-key evidence passed with zero model replay decisions and zero confirmation attempts.
+- Genuine selected-backend discovery: verified in `discovery-2026-08-16T23-12-04-329Z-7439cb4f` with the contained `codex-cli:gpt-5.6-luna` transport at xhigh and eight concrete external-process receipts; its exact persisted-file-byte SHA-256 `6b579c4bb9e05826855f83ca91a18942af95c8f3cc466950e5d8e7322fd75a39` is linked to the different-input, model-free replay `replay-2026-08-16T23-17-24-561Z-7432e8b8`.
+- Person-operated same-session handoff: verified in `replay-2026-08-16T23-17-36-117Z-37f35130` with a headed surface, trusted person-operated CLI mode, one unchanged surface-session ID, a person-reported action description `Clicked "Supervisor verified"`, independently verified resume state, and successful completion.
+- Independent final verification: no application defects found; assignment sections 3.1–3.7 passed. Private-plan alignment remains unverified because the exact ignored planning artifacts are absent.
 
-Do not describe the assignment as fully complete until genuine discovery and
-person-operated handoff evidence exist and the Verification Report is updated.
+Do not describe the assignment as fully published until the reviewed exact head
+passes PR/CI checks and is merged.
 
 ## Ownership Map
 
@@ -44,11 +48,15 @@ person-operated handoff evidence exist and the Verification Report is updated.
 - The original assignment PDF is the external source of truth if a discrepancy
   is discovered.
 - `.agent-work/tasks/001/product-brief.md` owns approved product scope and
-  acceptance criteria. It is local and ignored by Git.
+  acceptance criteria. It is local and ignored by Git. The exact file is not
+  present in this clone; do not reconstruct or claim to re-verify its wording.
 - `.agent-work/tasks/001/delivery-plan.md` owns the approved technical design,
-  phases, and verification strategy.
+  phases, and verification strategy. The exact file is not present in this
+  clone; `CONTINUITY.md` retains only the durable approval record.
 - `.agent-work/tasks/001/alignment-review.md` records the Product Partner's
-  scope-alignment review of the Delivery Plan.
+  scope-alignment review of the Delivery Plan. The exact file is not present
+  in this clone, so final verification must mark private-plan alignment
+  unverified rather than fabricate it.
 - `CONTINUITY.md` owns compact durable state, decisions, and the next action; it
   must remain useful without ignored local artifacts.
 - The initial implementation study is local, ignored, and non-authoritative.
@@ -59,6 +67,8 @@ person-operated handoff evidence exist and the Verification Report is updated.
 - Root `README.md`, root `REPORT.md`, `/artifacts/`, and `/evidence/` are public
   assignment deliverables. They must reflect actual behavior and evidence.
 - `src/` owns executable behavior; `tests/` owns automated verification.
+- `docs/engineering/git-workflow.md` owns branch, commit, PR, exact-head
+  review, merge, and publication conventions.
 
 ## Product-Delivery Workflow
 
@@ -81,6 +91,19 @@ triggers occur, never as empty placeholders.
 A user-facing behavior change, weakened acceptance criterion, material scope
 expansion, destructive migration risk, or new security/privacy implication
 after approval requires a Change Request and a newly approved artifact version.
+
+One fresh Verifier is the default, not the ceiling. If the user asks for more
+reviewers, give a firm risk-based recommendation first, then honor the request.
+Expect a second reviewer for the policy boundary, the human-handoff session
+contract, capability-artifact serialization, and any evidence claimed as
+genuine — those are the places a single reviewer is most likely to accept an
+unproven pass.
+
+Task artifact retention: `.agent-work/` stays local and Git-ignored, and
+`CONTINUITY.md` is tracked, so every continuity entry must stand on its own
+without the ignored artifacts. Confirmed deliberately — this repository is an
+assignment submission, and internal planning artifacts are not part of it.
+Revisit only if the user wants the task folders committed.
 
 ## Hard Invariants
 
@@ -139,3 +162,16 @@ Prefer a thin but real end-to-end vertical slice covering every must-have.
 Do not add speculative generality or optional stretch work. Heterogeneous
 surface and multi-tenant reuse requirements need credible design treatment;
 they do not authorize baseline desktop or multi-tenant infrastructure.
+
+Keep implementation scope literal. An improvement you notice but the approved
+plan does not require gets presented to the user and waits for approval, even
+in a file you are already editing.
+
+Comment only for non-obvious rationale, constraints, or safety — the policy
+boundary, redaction rules, and replay determinism are the kind that earn one.
+Do not narrate self-explanatory code.
+
+Once a dependency change is authorized, verify the current stable release from
+npm or the maintainer's release notes, prefer the latest compatible stable
+version, update `package-lock.json`, and explain any deliberate pin. This
+extends the Hard Invariant above with the mechanics.

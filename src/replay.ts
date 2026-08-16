@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import type {
   AutomationPolicy,
   CapabilityArtifact,
@@ -9,13 +10,18 @@ import {
   parseCapabilityArtifact,
   validateInvocationInputs,
 } from "./contracts.js";
+import { settleWithinDeadline, withinDeadline } from "./deadline.js";
 import { AutomationError, failureResult } from "./errors.js";
 import type { EvidenceWriter } from "./evidence.js";
 import { ControlCoordinator, type Operator } from "./intervention.js";
-import { intersectArtifactPolicy } from "./policy.js";
+import { extractOutputs } from "./outputs.js";
+import {
+  intersectArtifactPolicy,
+  registerSensitiveInputRules,
+} from "./policy.js";
 import type { SurfaceSession } from "./surface.js";
 
-export interface ReplayOptions {
+interface ReplayOptionsBase {
   artifact: unknown;
   inputs: Record<string, unknown>;
   policy: AutomationPolicy;
@@ -24,63 +30,34 @@ export interface ReplayOptions {
   operator?: Operator;
 }
 
-function scalar(value: string, parser: string): string | number | boolean {
-  switch (parser) {
-    case "string":
-      return value;
-    case "number": {
-      const parsed = Number(value);
-      if (!Number.isFinite(parsed))
-        throw new AutomationError(
-          "OUTPUT_PARSE_FAILED",
-          `Could not parse number output: ${value}`,
-        );
-      return parsed;
-    }
-    case "currency": {
-      const parsed = Number(value.replace(/[$,]/g, ""));
-      if (!Number.isFinite(parsed))
-        throw new AutomationError(
-          "OUTPUT_PARSE_FAILED",
-          `Could not parse currency output: ${value}`,
-        );
-      return parsed;
-    }
-    case "boolean":
-      if (/^(true|yes|1)$/i.test(value)) return true;
-      if (/^(false|no|0)$/i.test(value)) return false;
-      throw new AutomationError(
-        "OUTPUT_PARSE_FAILED",
-        `Could not parse boolean output: ${value}`,
-      );
-    default:
-      throw new AutomationError(
-        "OUTPUT_PARSER_UNSUPPORTED",
-        `Unsupported scalar parser: ${parser}`,
-        "invalid_artifact",
-      );
-  }
-}
+export type ReplayOptions = ReplayOptionsBase &
+  (
+    | { artifactSource: string; artifactSha256: string }
+    | { artifactSource?: undefined; artifactSha256?: undefined }
+  );
 
-async function extractOutputs(
+async function checkSurfaceIdentity(
   artifact: CapabilityArtifact,
   surface: SurfaceSession,
-): Promise<Record<string, unknown>> {
-  const outputs: Record<string, unknown> = {};
-  for (const [name, binding] of Object.entries(artifact.outputBindings)) {
-    outputs[name] =
-      binding.kind === "literal"
-        ? binding.value
-        : scalar(await surface.readControl(binding.source), binding.parseAs);
-  }
-  return outputs;
-}
-
-async function checkCompatibility(
-  artifact: CapabilityArtifact,
-  surface: SurfaceSession,
-  inputs: Record<string, string | number | boolean>,
 ): Promise<void> {
+  const observedIdentity = await surface.compatibilityIdentity();
+  const expectedIdentity = {
+    surfaceKind: artifact.compatibility.surfaceKind,
+    appFamily: artifact.compatibility.appFamily,
+    variant: artifact.compatibility.variant,
+  };
+  if (
+    observedIdentity.surfaceKind !== expectedIdentity.surfaceKind ||
+    observedIdentity.appFamily !== expectedIdentity.appFamily ||
+    observedIdentity.variant !== expectedIdentity.variant
+  ) {
+    throw new AutomationError(
+      "SURFACE_INCOMPATIBLE",
+      "Surface identity does not match the artifact compatibility contract",
+      "hard_failure",
+      { expected: expectedIdentity, observed: observedIdentity },
+    );
+  }
   const url = new URL(surface.currentUrl());
   if (!artifact.compatibility.allowedOrigins.includes(url.origin)) {
     throw new AutomationError(
@@ -90,6 +67,15 @@ async function checkCompatibility(
       { expected: artifact.compatibility.allowedOrigins, observed: url.origin },
     );
   }
+}
+
+async function checkCompatibility(
+  artifact: CapabilityArtifact,
+  surface: SurfaceSession,
+  inputs: Record<string, string | number | boolean>,
+): Promise<void> {
+  await checkSurfaceIdentity(artifact, surface);
+  const url = new URL(surface.currentUrl());
   if (
     !new RegExp(artifact.compatibility.entryRoutePattern).test(url.pathname)
   ) {
@@ -115,6 +101,49 @@ async function checkCompatibility(
   }
 }
 
+function assertEntryNavigation(
+  artifact: CapabilityArtifact,
+  inputs: Record<string, string | number | boolean>,
+): void {
+  const entry = artifact.steps[0];
+  if (entry?.kind !== "navigate") {
+    throw new AutomationError(
+      "INVALID_ENTRY_STEP",
+      "The first capability step must navigate to the declared entry surface",
+      "invalid_artifact",
+    );
+  }
+  const rawUrl =
+    entry.url.kind === "literal" ? entry.url.value : inputs[entry.url.name];
+  if (rawUrl === undefined) {
+    throw new AutomationError(
+      "INVALID_ENTRY_STEP",
+      "The entry navigation does not resolve to an invocation value",
+      "invalid_artifact",
+    );
+  }
+  let url: URL;
+  try {
+    url = new URL(String(rawUrl));
+  } catch {
+    throw new AutomationError(
+      "INVALID_ENTRY_STEP",
+      "The entry navigation must resolve to an absolute URL",
+      "invalid_artifact",
+    );
+  }
+  if (
+    !artifact.compatibility.allowedOrigins.includes(url.origin) ||
+    !new RegExp(artifact.compatibility.entryRoutePattern).test(url.pathname)
+  ) {
+    throw new AutomationError(
+      "INVALID_ENTRY_STEP",
+      "The first navigation does not target the declared compatibility entry",
+      "invalid_artifact",
+    );
+  }
+}
+
 async function evaluateBusinessOutcome(
   artifact: CapabilityArtifact,
   surface: SurfaceSession,
@@ -133,6 +162,7 @@ async function recover(
   evidence: EvidenceWriter,
   coordinator: ControlCoordinator,
   policy: AutomationPolicy,
+  deadlineMs: number,
 ): Promise<void> {
   const retry = step.retryPolicy;
   if (!retry || !retry.conditionCodes.includes(code)) {
@@ -157,11 +187,24 @@ async function recover(
       step.id,
     );
     if (retry.delayMs > 0) {
+      if (Date.now() + retry.delayMs >= deadlineMs) {
+        throw new AutomationError(
+          "REPLAY_BOUND_EXCEEDED",
+          "Replay exceeded its configured time bound during recovery",
+          "hard_failure",
+          { stepId: step.id },
+        );
+      }
       await new Promise((resolve) => setTimeout(resolve, retry.delayMs));
     }
     coordinator.assertAutomationOwner();
     if (retry.strategy === "reload") {
-      await surface.reload(policy, () => coordinator.currentOwner(), step.id);
+      await surface.reload(
+        policy,
+        () => coordinator.currentOwner(),
+        step.id,
+        deadlineMs,
+      );
       await evidence.event(
         "replay",
         "recovery_policy_checked",
@@ -223,6 +266,53 @@ export async function replayCapability(
     );
   }
   const capabilityId = artifact.capability.id;
+  if (
+    options.artifactSha256 !== undefined &&
+    !/^[a-f0-9]{64}$/.test(options.artifactSha256)
+  ) {
+    return failureResult(
+      options.evidence.runId,
+      capabilityId,
+      new AutomationError(
+        "INVALID_ARTIFACT_DIGEST",
+        "Artifact byte digest must be a lowercase SHA-256 value",
+        "invalid_artifact",
+      ),
+    );
+  }
+  const artifactSha256 =
+    options.artifactSha256 ??
+    createHash("sha256").update(JSON.stringify(artifact)).digest("hex");
+  const artifactDigestKind =
+    options.artifactSha256 === undefined
+      ? "canonical-json"
+      : "persisted-file-bytes";
+  const sensitiveOutputs = Object.entries(artifact.outputSchema)
+    .filter(([name, definition]) => {
+      const binding = artifact.outputBindings[name];
+      return (
+        definition.sensitive ||
+        (binding?.kind === "scalar" && binding.sensitive)
+      );
+    })
+    .map(([name]) => name);
+  const sensitiveInputs = Object.entries(artifact.inputSchema)
+    .filter(([, definition]) => definition.sensitive)
+    .map(([name]) => name);
+  const sensitiveInputValues = sensitiveInputs.flatMap((name) => {
+    const value = options.inputs[name];
+    return value === undefined ||
+      (typeof value !== "string" &&
+        typeof value !== "number" &&
+        typeof value !== "boolean")
+      ? []
+      : [value];
+  });
+  const failureSanitization = {
+    sensitiveFields: new Set([...sensitiveInputs, ...sensitiveOutputs]),
+    sensitiveValues: new Set(sensitiveInputValues.map(String)),
+  };
+  options.evidence.addSensitiveFields(sensitiveOutputs);
   let inputs: Record<string, string | number | boolean>;
   try {
     inputs = validateInvocationInputs(artifact.inputSchema, options.inputs);
@@ -232,22 +322,53 @@ export async function replayCapability(
       capabilityId,
       new AutomationError(
         "INVALID_INVOCATION_INPUTS",
-        error instanceof Error ? error.message : "Input validation failed",
+        "Invocation inputs did not satisfy the artifact contract",
         "invalid_artifact",
       ),
+      failureSanitization,
     );
   }
+  options.evidence.addSensitiveFields(sensitiveInputs);
+  options.evidence.addSensitiveValues(sensitiveInputValues);
+  options.surface.registerSensitiveFields(sensitiveInputs);
+  options.surface.registerSensitiveValues(sensitiveInputValues);
+  options.surface.registerSensitiveOutputs(
+    sensitiveOutputs.map((name) => {
+      const binding = artifact.outputBindings[name];
+      return {
+        name,
+        ...(binding?.kind === "scalar" ? { target: binding.source } : {}),
+      };
+    }),
+  );
   let policy: AutomationPolicy;
   try {
-    policy = intersectArtifactPolicy(options.policy, artifact);
+    policy = registerSensitiveInputRules(
+      intersectArtifactPolicy(options.policy, artifact),
+      sensitiveInputs,
+    );
+    assertEntryNavigation(artifact, inputs);
   } catch (error) {
-    return failureResult(options.evidence.runId, capabilityId, error);
+    return failureResult(
+      options.evidence.runId,
+      capabilityId,
+      error,
+      failureSanitization,
+    );
   }
   const coordinator = new ControlCoordinator(
     options.evidence.runId,
     options.evidence,
   );
   const startedAt = Date.now();
+  const deadlineMs = startedAt + policy.maxRunMs;
+  const bounded = <T>(
+    stepId: string | undefined,
+    operation: (signal: AbortSignal) => Promise<T>,
+  ) =>
+    withinDeadline(deadlineMs, stepId, operation, () =>
+      options.surface.abort(),
+    );
   let currentStep: CapabilityStep | undefined;
   try {
     await options.evidence.initialize();
@@ -255,15 +376,26 @@ export async function replayCapability(
       "replay",
       "run_started",
       coordinator.currentOwner(),
-      { capabilityId, inputs, modelDecisionCalls: 0 },
+      {
+        capabilityId,
+        artifactDiscoveryRunId: artifact.provenance.discoveryRunId,
+        artifactSha256,
+        artifactDigestKind,
+        ...(options.artifactSource === undefined
+          ? {}
+          : { artifactSource: options.artifactSource }),
+        inputs,
+        modelDecisionCalls: 0,
+        configuredPolicy: {
+          allowedOrigins: policy.allowedOrigins,
+          blockedControlPatterns: policy.blockedControlPatterns,
+        },
+      },
     );
-    await options.surface.start();
+    await bounded(undefined, (signal) => options.surface.start(signal));
     for (const [index, step] of artifact.steps.entries()) {
       currentStep = step;
-      if (
-        index >= policy.maxSteps ||
-        Date.now() - startedAt > policy.maxRunMs
-      ) {
+      if (index >= policy.maxSteps || Date.now() >= deadlineMs) {
         throw new AutomationError(
           "REPLAY_BOUND_EXCEEDED",
           "Replay exceeded its configured step or time bound",
@@ -283,12 +415,20 @@ export async function replayCapability(
         },
         step.id,
       );
-      await options.surface.execute(step, inputs, policy, () =>
-        coordinator.currentOwner(),
+      await bounded(step.id, () =>
+        options.surface.execute(
+          step,
+          inputs,
+          policy,
+          () => coordinator.currentOwner(),
+          deadlineMs,
+        ),
       );
 
       if (index === 0) {
-        await checkCompatibility(artifact, options.surface, inputs);
+        await bounded(step.id, () =>
+          checkCompatibility(artifact, options.surface, inputs),
+        );
         await options.evidence.event(
           "replay",
           "compatibility_verified",
@@ -296,15 +436,20 @@ export async function replayCapability(
           {
             appFamily: artifact.compatibility.appFamily,
             variant: artifact.compatibility.variant ?? "base",
+            observedIdentity: await bounded(step.id, () =>
+              options.surface.compatibilityIdentity(),
+            ),
           },
           step.id,
         );
+      } else {
+        await bounded(step.id, () =>
+          checkSurfaceIdentity(artifact, options.surface),
+        );
       }
 
-      const businessOutcome = await evaluateBusinessOutcome(
-        artifact,
-        options.surface,
-        inputs,
+      const businessOutcome = await bounded(step.id, () =>
+        evaluateBusinessOutcome(artifact, options.surface, inputs),
       );
       if (businessOutcome) {
         await options.evidence.event(
@@ -328,17 +473,23 @@ export async function replayCapability(
         return result;
       }
 
-      let state = await options.surface.runtimeState();
+      let state = await bounded(step.id, () => options.surface.runtimeState());
       if (state.recoverableCode) {
-        await recover(
-          step,
-          state.recoverableCode,
-          options.surface,
-          options.evidence,
-          coordinator,
-          policy,
+        await bounded(step.id, () =>
+          recover(
+            step,
+            state.recoverableCode!,
+            options.surface,
+            options.evidence,
+            coordinator,
+            policy,
+            deadlineMs,
+          ),
         );
-        state = await options.surface.runtimeState();
+        await bounded(step.id, () =>
+          checkSurfaceIdentity(artifact, options.surface),
+        );
+        state = await bounded(step.id, () => options.surface.runtimeState());
       }
       if (state.failureCode) {
         throw new AutomationError(
@@ -355,7 +506,9 @@ export async function replayCapability(
         );
       }
       if (state.interventionCode) {
-        const observation = await options.surface.observe("intervention");
+        const observation = await bounded(step.id, () =>
+          options.surface.observe("intervention"),
+        );
         if (!options.operator) {
           const requestPath = await options.evidence.json(
             "intervention-request.json",
@@ -372,6 +525,7 @@ export async function replayCapability(
               evidencePaths: [observation.screenshotPath],
               resumeCondition: resumeCondition(),
               surfaceSessionId: options.surface.id,
+              surfaceMode: options.surface.mode,
             },
           );
           throw new AutomationError(
@@ -394,15 +548,22 @@ export async function replayCapability(
             evidencePaths: [observation.screenshotPath],
             resumeCondition: resumeCondition(),
             surfaceSessionId: options.surface.id,
+            surfaceMode: options.surface.mode,
           },
           options.operator,
           (condition) => options.surface.evaluateCondition(condition, inputs),
+          deadlineMs,
+        );
+        await bounded(step.id, () =>
+          checkSurfaceIdentity(artifact, options.surface),
         );
       }
 
       if (
         step.checkpoint &&
-        !(await options.surface.evaluateCondition(step.checkpoint, inputs))
+        !(await bounded(step.id, () =>
+          options.surface.evaluateCondition(step.checkpoint!, inputs),
+        ))
       ) {
         throw new AutomationError(
           "CHECKPOINT_FAILED",
@@ -424,7 +585,14 @@ export async function replayCapability(
       );
     }
 
-    if (!(await options.surface.evaluateCondition(artifact.success, inputs))) {
+    await bounded(currentStep?.id, () =>
+      checkSurfaceIdentity(artifact, options.surface),
+    );
+    if (
+      !(await bounded(currentStep?.id, () =>
+        options.surface.evaluateCondition(artifact.success, inputs),
+      ))
+    ) {
       throw new AutomationError(
         "SUCCESS_CONDITION_FAILED",
         "Final capability success condition was not satisfied",
@@ -432,8 +600,15 @@ export async function replayCapability(
         { expected: artifact.success, observed: options.surface.currentUrl() },
       );
     }
-    const finalObservation = await options.surface.observe("success");
-    const outputs = await extractOutputs(artifact, options.surface);
+    const finalObservation = await bounded(currentStep?.id, () =>
+      options.surface.observe("success"),
+    );
+    const outputs = await extractOutputs(
+      artifact,
+      options.surface,
+      deadlineMs,
+      currentStep?.id,
+    );
     const result: ReplayResult = {
       status: "success",
       runId: options.evidence.runId,
@@ -447,6 +622,9 @@ export async function replayCapability(
       screenshotPath: finalObservation.screenshotPath,
       confirmationExecuted: false,
       modelDecisionCalls: 0,
+      artifactDiscoveryRunId: artifact.provenance.discoveryRunId,
+      artifactSha256,
+      artifactDigestKind,
     });
     await options.evidence.json("result.json", result);
     return result;
@@ -455,11 +633,15 @@ export async function replayCapability(
       error instanceof AutomationError
         ? (error.context.evidencePaths ?? [])
         : [];
-    try {
-      const observation = await options.surface.observe("failure");
-      evidencePaths = [...evidencePaths, observation.screenshotPath];
-    } catch {
-      // The surface may have failed before a page existed; structured logs remain.
+    if (Date.now() < deadlineMs) {
+      try {
+        const observation = await bounded(currentStep?.id, () =>
+          options.surface.observe("failure"),
+        );
+        evidencePaths = [...evidencePaths, observation.screenshotPath];
+      } catch {
+        // The surface may have failed before a page existed; structured logs remain.
+      }
     }
     const normalized =
       error instanceof AutomationError
@@ -472,6 +654,7 @@ export async function replayCapability(
       options.evidence.runId,
       capabilityId,
       normalized,
+      failureSanitization,
     );
     await options.evidence.event(
       "replay",
@@ -486,6 +669,6 @@ export async function replayCapability(
     await options.evidence.json("result.json", result);
     return result;
   } finally {
-    await options.surface.close().catch(() => undefined);
+    await settleWithinDeadline(deadlineMs, () => options.surface.close());
   }
 }

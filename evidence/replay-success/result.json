@@ -4,7 +4,7 @@
   "capabilityId": "prepare-subaccount",
   "outputs": {
     "status": "ready_for_review",
-    "memberReference": "Member ••1002",
+    "memberReference": "[REDACTED]",
     "productCode": "MONEY_MARKET",
     "productName": "Money Market",
     "nickname": "Rainy Day"

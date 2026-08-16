@@ -64,6 +64,7 @@
   "outputSchema": {
     "status": {
       "type": "string",
+      "constant": "ready_for_review",
       "description": "Review readiness state."
     },
     "memberReference": {

@@ -1,0 +1,75 @@
+{
+  "url": "http://127.0.0.1:4317/backoffice/members/[REDACTED]/accounts/new",
+  "title": "Prepare new sub-account · Harborline CU Operations",
+  "visibleText": "Prepare new sub-account Enter the requested values. This flow prepares a review only and does not create an account. REFERENCE [REDACTED] NAME Avery Synthetic Account details Product Select a product Savings Plus (SAV_PLUS) Money Market (MONEY_MARKET) Account nickname Synthetic label shown on the review screen. Review new sub-account Cancel",
+  "semanticTree": "region=header h1[role=heading] name=\"Harborline CU OperationsMember servicing workstation\" value=\"\" disabled=false\nregion=navigation h2[role=heading] name=\"Sub-account preparation\" value=\"\" disabled=false\nregion=main h1[role=heading] name=\"Prepare new sub-account\" value=\"\" disabled=false\nregion=main h2[role=heading] name=\"Account details\" value=\"\" disabled=false\nregion=main select[role=combobox] name=\"Product\" value=\"SAV_PLUS\" disabled=false\nregion=main input[role=textbox] name=\"Account nickname\" value=\"Discovery Sample\" disabled=false\nregion=main button[role=button] name=\"Review new sub-account\" value=\"\" disabled=false\nregion=main a[role=link] name=\"Cancel\" value=\"\" disabled=false",
+  "controls": [
+    {
+      "region": "header",
+      "tag": "h1",
+      "role": "heading",
+      "label": "Harborline CU OperationsMember servicing workstation",
+      "value": "",
+      "disabled": false
+    },
+    {
+      "region": "navigation",
+      "tag": "h2",
+      "role": "heading",
+      "label": "Sub-account preparation",
+      "value": "",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "h1",
+      "role": "heading",
+      "label": "Prepare new sub-account",
+      "value": "",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "h2",
+      "role": "heading",
+      "label": "Account details",
+      "value": "",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "select",
+      "role": "combobox",
+      "label": "Product",
+      "value": "SAV_PLUS",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "input",
+      "role": "textbox",
+      "label": "Account nickname",
+      "value": "Discovery Sample",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "button",
+      "role": "button",
+      "label": "Review new sub-account",
+      "value": "",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "a",
+      "role": "link",
+      "label": "Cancel",
+      "value": "",
+      "disabled": false
+    }
+  ],
+  "screenshotDataUrl": "[OMITTED_FROM_PERSISTED_SNAPSHOT]",
+  "screenshotPath": "evidence/discovery-2026-08-16T23-12-04-329Z-7439cb4f/07-discovery-6.png",
+  "stepCount": 7
+}

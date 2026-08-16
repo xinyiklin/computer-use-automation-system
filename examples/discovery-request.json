@@ -1,5 +1,5 @@
 {
-  "goal": "Prepare a Savings Plus sub-account with nickname Discovery Sample for the supplied synthetic member and stop at review.",
+  "goal": "Prepare a synthetic sub-account using the supplied member, product, and nickname inputs, then stop at review.",
   "target": {
     "entryUrl": "http://127.0.0.1:4317/backoffice/members/search",
     "appFamily": "synthetic-credit-union",
@@ -30,12 +30,8 @@
   "desiredOutputs": {
     "status": {
       "type": "string",
+      "constant": "ready_for_review",
       "description": "Review readiness state."
-    },
-    "memberReference": {
-      "type": "string",
-      "sensitive": true,
-      "description": "Redacted synthetic member reference shown at review."
     },
     "productCode": {
       "type": "string",

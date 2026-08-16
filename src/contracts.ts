@@ -48,7 +48,7 @@ export const LocatorSpecSchema = z.discriminatedUnion("kind", [
     .object({
       kind: z.literal("relative"),
       anchorText: z.string().min(1),
-      relation: z.enum(["following", "within", "near"]),
+      relation: z.enum(["following", "within"]),
       elementHint: z.string().optional(),
     })
     .strict(),
@@ -202,7 +202,64 @@ export const OutputDefinitionSchema = z
   .object({
     type: z.enum(["string", "number", "boolean", "currency"]),
     sensitive: z.boolean().optional(),
+    constant: z.union([z.string(), z.number(), z.boolean()]).optional(),
     description: z.string().min(1),
+  })
+  .strict()
+  .superRefine((definition, context) => {
+    if (definition.constant === undefined) return;
+    const valid =
+      (definition.type === "string" &&
+        typeof definition.constant === "string") ||
+      ((definition.type === "number" || definition.type === "currency") &&
+        typeof definition.constant === "number") ||
+      (definition.type === "boolean" &&
+        typeof definition.constant === "boolean");
+    if (!valid) {
+      context.addIssue({
+        code: "custom",
+        message: `Output constant must match declared type ${definition.type}`,
+        path: ["constant"],
+      });
+    }
+  });
+
+const ScalarOutputLocatorSchema = z.discriminatedUnion("kind", [
+  z
+    .object({
+      kind: z.literal("label"),
+      text: z.string().min(1),
+      exact: z.boolean().optional(),
+    })
+    .strict(),
+  z
+    .object({
+      kind: z.literal("relative"),
+      anchorText: z.string().min(1),
+      relation: z.enum(["following", "within"]),
+      elementHint: z.enum([
+        "input",
+        "select",
+        "textarea",
+        "output",
+        "td",
+        "th",
+        "dd",
+        "span",
+        "strong",
+        "code",
+      ]),
+    })
+    .strict(),
+]);
+
+const ScalarOutputControlRefSchema = z
+  .object({
+    description: z.string().min(1),
+    robustnessNote: z.string().min(1),
+    framePath: z.array(FrameLocatorSpecSchema).optional(),
+    candidates: z.array(ScalarOutputLocatorSchema).min(1),
+    expectedCardinality: z.literal(1),
   })
   .strict();
 
@@ -216,7 +273,7 @@ export const OutputBindingSchema = z.discriminatedUnion("kind", [
   z
     .object({
       kind: z.literal("scalar"),
-      source: ControlRefSchema,
+      source: ScalarOutputControlRefSchema,
       parseAs: z.enum(["string", "number", "currency", "boolean"]),
       sensitive: z.boolean().optional(),
     })
@@ -234,6 +291,30 @@ export const BusinessOutcomeRuleSchema = z
       .optional(),
   })
   .strict();
+
+type InputReference = {
+  name: string;
+  path: Array<string | number>;
+};
+
+function collectInputReferences(
+  value: unknown,
+  path: Array<string | number> = [],
+): InputReference[] {
+  if (Array.isArray(value)) {
+    return value.flatMap((item, index) =>
+      collectInputReferences(item, [...path, index]),
+    );
+  }
+  if (typeof value !== "object" || value === null) return [];
+  const record = value as Record<string, unknown>;
+  if (record.kind === "input" && typeof record.name === "string") {
+    return [{ name: record.name, path }];
+  }
+  return Object.entries(record).flatMap(([key, child]) =>
+    collectInputReferences(child, [...path, key]),
+  );
+}
 
 export const CapabilityArtifactSchema = z
   .object({
@@ -273,6 +354,14 @@ export const CapabilityArtifactSchema = z
   })
   .strict()
   .superRefine((artifact, context) => {
+    if (artifact.steps[0]?.kind !== "navigate") {
+      context.addIssue({
+        code: "custom",
+        message:
+          "The first capability step must navigate to the declared entry surface before business actions",
+        path: ["steps", 0],
+      });
+    }
     const ids = new Set<string>();
     for (const [index, step] of artifact.steps.entries()) {
       if (ids.has(step.id)) {
@@ -283,15 +372,13 @@ export const CapabilityArtifactSchema = z
         });
       }
       ids.add(step.id);
-      if (
-        "value" in step &&
-        step.value.kind === "input" &&
-        !(step.value.name in artifact.inputSchema)
-      ) {
+    }
+    for (const reference of collectInputReferences(artifact)) {
+      if (!(reference.name in artifact.inputSchema)) {
         context.addIssue({
           code: "custom",
-          message: `Unknown input reference: ${step.value.name}`,
-          path: ["steps", index, "value"],
+          message: `Unknown input reference: ${reference.name}`,
+          path: reference.path,
         });
       }
     }
@@ -302,6 +389,61 @@ export const CapabilityArtifactSchema = z
           message: `Missing output binding: ${name}`,
           path: ["outputBindings", name],
         });
+      }
+    }
+    for (const [name, binding] of Object.entries(artifact.outputBindings)) {
+      const definition = artifact.outputSchema[name];
+      if (!definition) {
+        context.addIssue({
+          code: "custom",
+          message: `Unknown output binding: ${name}`,
+          path: ["outputBindings", name],
+        });
+        continue;
+      }
+      if (binding.kind === "literal") {
+        if (definition.sensitive) {
+          context.addIssue({
+            code: "custom",
+            message: `Sensitive output cannot use a public literal constant: ${name}`,
+            path: ["outputBindings", name],
+          });
+        }
+        if (definition.constant === undefined) {
+          context.addIssue({
+            code: "custom",
+            message: `Literal output binding requires an explicit constant output definition: ${name}`,
+            path: ["outputBindings", name],
+          });
+        } else if (binding.value !== definition.constant) {
+          context.addIssue({
+            code: "custom",
+            message: `Literal output binding does not match the declared constant: ${name}`,
+            path: ["outputBindings", name],
+          });
+        }
+      } else {
+        if (binding.parseAs !== definition.type) {
+          context.addIssue({
+            code: "custom",
+            message: `Output binding parser must match declared type ${definition.type}: ${name}`,
+            path: ["outputBindings", name, "parseAs"],
+          });
+        }
+        if (definition.constant !== undefined) {
+          context.addIssue({
+            code: "custom",
+            message: `Constant output definition requires a matching literal binding: ${name}`,
+            path: ["outputBindings", name],
+          });
+        }
+        if (Boolean(binding.sensitive) !== Boolean(definition.sensitive)) {
+          context.addIssue({
+            code: "custom",
+            message: `Output binding sensitivity must match its output definition: ${name}`,
+            path: ["outputBindings", name, "sensitive"],
+          });
+        }
       }
     }
   });
@@ -359,6 +501,7 @@ export const AgentProposalSchema = z.discriminatedUnion("kind", [
       kind: z.literal("stuck"),
       reason: z.string().min(1),
       interventionHint: z.string().optional(),
+      resumeCondition: ConditionSchema,
     })
     .strict(),
 ]);
@@ -383,6 +526,7 @@ export const AutomationPolicySchema = z
     maxRunMs: z.number().int().positive(),
     allowedRiskClasses: z.array(RiskClassSchema),
     blockedRiskClasses: z.array(RiskClassSchema),
+    blockedControlPatterns: z.array(z.string().min(1)),
     sensitiveInputRules: z.record(z.string(), z.enum(["redact", "mask"])),
   })
   .strict();
@@ -420,6 +564,7 @@ export interface Observation {
   semanticTree: string;
   visibleText: string;
   controls: Array<{
+    region: "main" | "navigation" | "header" | "footer" | "document";
     tag: string;
     role: string | null;
     label: string;

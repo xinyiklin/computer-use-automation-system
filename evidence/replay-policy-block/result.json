@@ -4,10 +4,9 @@
   "capabilityId": "prepare-subaccount",
   "error": {
     "category": "policy",
-    "code": "POLICY_RISK_BLOCKED",
-    "message": "Risk class is blocked: irreversible",
+    "code": "POLICY_CONTROL_BLOCKED",
+    "message": "Resolved control is independently blocked by configured policy",
     "stepId": "confirm-account",
-    "observed": "irreversible",
     "evidencePaths": [
       "evidence/replay-policy-block/01-failure.png"
     ]

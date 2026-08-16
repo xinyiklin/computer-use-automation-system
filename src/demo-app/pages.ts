@@ -114,7 +114,7 @@ function layout(title: string, activeStep: number, body: string): string {
     "Review change",
   ];
   return `<!doctype html>
-<html lang="en">
+<html lang="en" data-automation-surface-kind="web" data-automation-app-family="synthetic-credit-union" data-automation-variant="base">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -145,7 +145,7 @@ export function searchPage(
   options: { memberId?: string; notFound?: boolean } = {},
 ): string {
   const notice = options.notFound
-    ? `<section class="notice warning" data-business-code="MEMBER_NOT_FOUND"><h2>Member not found</h2><p>No member matched <strong>${escapeHtml(options.memberId ?? "")}</strong>. Verify the synthetic member ID and try again.</p></section>`
+    ? `<section class="notice warning" data-business-code="MEMBER_NOT_FOUND"><h2>Member not found</h2><p>No member matched <strong data-sensitive="memberId">${escapeHtml(options.memberId ?? "")}</strong>. Verify the synthetic member ID and try again.</p></section>`
     : "";
   return layout(
     "Member search",
@@ -174,7 +174,7 @@ export function transientPage(memberId: string): string {
     2,
     `<section class="notice warning" data-recoverable-code="TRANSIENT_LOAD_TIMEOUT">
        <h1 class="page-heading">Member record is still loading</h1>
-       <p>The servicing host returned a temporary condition for ${escapeHtml(memberId)}. A bounded reload may recover it.</p>
+       <p>The servicing host returned a temporary condition for <span data-sensitive="memberId">${escapeHtml(memberId)}</span>. A bounded reload may recover it.</p>
      </section>`,
   );
 }
@@ -185,7 +185,7 @@ export function memberPage(member: MemberFixture): string {
     2,
     `<h1 class="page-heading">Member details</h1>
      <p class="lede">Confirm the synthetic record before preparing a new sub-account.</p>
-     <div class="member-bar"><span><strong>Reference</strong>${escapeHtml(member.displayReference)}</span><span><strong>Name</strong>${escapeHtml(member.name)}</span><span><strong>Status</strong>Active</span></div>
+     <div class="member-bar"><span><strong>Reference</strong><span data-sensitive="memberReference">${escapeHtml(member.displayReference)}</span></span><span><strong>Name</strong>${escapeHtml(member.name)}</span><span><strong>Status</strong>Active</span></div>
      <section class="panel" aria-labelledby="accounts-title">
        <h2 class="panel-title" id="accounts-title">Current accounts</h2>
        <div class="panel-body">
@@ -202,7 +202,7 @@ export function permissionDeniedPage(member: MemberFixture): string {
     3,
     `<section class="notice error" data-failure-code="PERMISSION_DENIED">
        <h1 class="page-heading">Permission denied</h1>
-       <p>This operator cannot prepare a new sub-account for ${escapeHtml(member.displayReference)}. Stop and route the failure for review.</p>
+       <p>This operator cannot prepare a new sub-account for <span data-sensitive="memberReference">${escapeHtml(member.displayReference)}</span>. Stop and route the failure for review.</p>
      </section>
      <a href="/backoffice/members/${encodeURIComponent(member.id)}">Return to member details</a>`,
   );
@@ -236,7 +236,7 @@ export function accountFormPage(
     `${error}
      <h1 class="page-heading">Prepare new sub-account</h1>
      <p class="lede">Enter the requested values. This flow prepares a review only and does not create an account.</p>
-     <div class="member-bar"><span><strong>Reference</strong>${escapeHtml(member.displayReference)}</span><span><strong>Name</strong>${escapeHtml(member.name)}</span></div>
+     <div class="member-bar"><span><strong>Reference</strong><span data-sensitive="memberReference">${escapeHtml(member.displayReference)}</span></span><span><strong>Name</strong>${escapeHtml(member.name)}</span></div>
      <section class="panel" aria-labelledby="account-title">
        <h2 class="panel-title" id="account-title">Account details</h2>
        <div class="panel-body">
@@ -265,7 +265,7 @@ export function reviewPage(
        <h2 class="panel-title" id="review-title">Prepared account summary</h2>
        <div class="panel-body">
          <table aria-label="Prepared account summary"><tbody>
-           <tr><th scope="row">Member reference</th><td>${escapeHtml(member.displayReference)}</td></tr>
+           <tr><th scope="row">Member reference</th><td data-sensitive="memberReference">${escapeHtml(member.displayReference)}</td></tr>
            <tr><th scope="row">Product code</th><td>${escapeHtml(product.code)}</td></tr>
            <tr><th scope="row">Product name</th><td>${escapeHtml(product.name)}</td></tr>
            <tr><th scope="row">Nickname</th><td>${escapeHtml(nickname)}</td></tr>

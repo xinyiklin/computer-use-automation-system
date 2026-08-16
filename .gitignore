@@ -39,3 +39,7 @@ pnpm-debug.log*
 Thumbs.db
 
 # Do not ignore /evidence/; genuine submission evidence must be tracked later.
+
+# Added by machine-bootstrap project initializer
+CLAUDE.local.md
+.claude/settings.local.json

@@ -14,6 +14,25 @@ import {
 const origin = "http://127.0.0.1:4317";
 
 describe("automation policy", () => {
+  it("allows an explicit bounded runtime override", () => {
+    expect(createDefaultPolicy(origin, { maxRunMs: 300_000 }).maxRunMs).toBe(
+      300_000,
+    );
+    expect(createDefaultPolicy(origin).maxRunMs).toBe(120_000);
+  });
+
+  it("adds every declared sensitive input to the surface masking policy", () => {
+    expect(
+      createDefaultPolicy(origin, {
+        sensitiveInputNames: ["customerKey", "caseNumber"],
+      }).sensitiveInputRules,
+    ).toEqual({
+      memberId: "mask",
+      customerKey: "mask",
+      caseNumber: "mask",
+    });
+  });
+
   it("permits the bounded synthetic entry route", () => {
     expect(
       assertUrlAllowed(
@@ -49,6 +68,21 @@ describe("automation policy", () => {
         createDefaultPolicy(origin),
       ),
     ).toThrow(/Risk class is blocked/);
+  });
+
+  it("blocks a known irreversible control even when the artifact mislabels it safe", () => {
+    expect(() =>
+      assertStepAllowed(
+        {
+          id: "mislabeled-confirm",
+          kind: "click",
+          description: "Mislabeled confirmation",
+          riskClass: "safe",
+          target: CONTROLS.confirm,
+        },
+        createDefaultPolicy(origin),
+      ),
+    ).toThrow(/independently blocked/);
   });
 
   it("allows artifacts only to narrow configured origins", () => {

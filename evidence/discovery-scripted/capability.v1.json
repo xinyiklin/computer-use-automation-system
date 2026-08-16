@@ -12,7 +12,7 @@
     "appFamily": "synthetic-credit-union",
     "variant": "base",
     "allowedOrigins": [
-      "http://127.0.0.1:51827"
+      "http://127.0.0.1:49873"
     ],
     "entryRoutePattern": "^/backoffice/members/search$",
     "requiredLandmarks": [
@@ -40,7 +40,12 @@
     ]
   },
   "inputSchema": {
-    "memberId": "[REDACTED]",
+    "memberId": {
+      "type": "string",
+      "required": true,
+      "sensitive": true,
+      "description": "Synthetic member identifier."
+    },
     "productCode": {
       "type": "string",
       "required": true,
@@ -59,6 +64,7 @@
   "outputSchema": {
     "status": {
       "type": "string",
+      "constant": "ready_for_review",
       "description": "Review readiness state."
     },
     "memberReference": {
@@ -183,7 +189,7 @@
       "kind": "navigate",
       "url": {
         "kind": "literal",
-        "value": "http://127.0.0.1:51827/backoffice/members/search"
+        "value": "http://127.0.0.1:49873/backoffice/members/search"
       }
     },
     {
@@ -499,7 +505,7 @@
   },
   "provenance": {
     "discoveryRunId": "discovery-scripted",
-    "createdAt": "2026-08-13T22:14:08.395Z",
+    "createdAt": "2026-08-16T23:20:13.417Z",
     "modelIdentifier": "scripted-model-test-double"
   }
 }

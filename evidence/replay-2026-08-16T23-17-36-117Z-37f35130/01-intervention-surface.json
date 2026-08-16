@@ -1,0 +1,43 @@
+{
+  "url": "http://127.0.0.1:4317/backoffice/members/[REDACTED]/accounts/new",
+  "title": "Supervisor verification required · Harborline CU Operations",
+  "visibleText": "Supervisor verification required A person must verify this synthetic member before account preparation can continue. Automation must pause and preserve this session. Supervisor verified",
+  "semanticTree": "region=header h1[role=heading] name=\"Harborline CU OperationsMember servicing workstation\" value=\"\" disabled=false\nregion=navigation h2[role=heading] name=\"Sub-account preparation\" value=\"\" disabled=false\nregion=main h1[role=heading] name=\"Supervisor verification required\" value=\"\" disabled=false\nregion=main button[role=button] name=\"Supervisor verified\" value=\"\" disabled=false",
+  "controls": [
+    {
+      "region": "header",
+      "tag": "h1",
+      "role": "heading",
+      "label": "Harborline CU OperationsMember servicing workstation",
+      "value": "",
+      "disabled": false
+    },
+    {
+      "region": "navigation",
+      "tag": "h2",
+      "role": "heading",
+      "label": "Sub-account preparation",
+      "value": "",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "h1",
+      "role": "heading",
+      "label": "Supervisor verification required",
+      "value": "",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "button",
+      "role": "button",
+      "label": "Supervisor verified",
+      "value": "",
+      "disabled": false
+    }
+  ],
+  "screenshotDataUrl": "[OMITTED_FROM_PERSISTED_SNAPSHOT]",
+  "screenshotPath": "evidence/replay-2026-08-16T23-17-36-117Z-37f35130/01-intervention.png",
+  "stepCount": 1
+}

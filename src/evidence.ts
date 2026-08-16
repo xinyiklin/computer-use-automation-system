@@ -1,29 +1,68 @@
+import { createHash } from "node:crypto";
 import { appendFile, mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import type { ControlOwner, RunEvent } from "./contracts.js";
-import { RunEventSchema } from "./contracts.js";
+import {
+  InputDefinitionSchema,
+  OutputBindingSchema,
+  OutputDefinitionSchema,
+  RunEventSchema,
+} from "./contracts.js";
+import { sensitiveValueRepresentations } from "./sensitive-values.js";
 
 const SECRET_KEY =
   /(api[-_]?key|authorization|cookie|token|password|secret|credential)/i;
 const SENSITIVE_VALUE = /\b(?:\d[ -]?){11,18}\d\b/g;
+
+function isDeclarativeDefinition(
+  value: unknown,
+): value is Record<string, unknown> {
+  return (
+    InputDefinitionSchema.safeParse(value).success ||
+    OutputDefinitionSchema.safeParse(value).success ||
+    OutputBindingSchema.safeParse(value).success
+  );
+}
 
 export function sanitizePersisted(
   value: unknown,
   sensitiveFields: ReadonlySet<string> = new Set(),
   sensitiveValues: ReadonlySet<string> = new Set(),
 ): unknown {
+  return sanitizeValue(value, sensitiveFields, sensitiveValues);
+}
+
+const SCHEMA_CONTAINERS = new Set([
+  "inputContract",
+  "inputSchema",
+  "desiredOutputs",
+  "outputSchema",
+  "outputBindings",
+]);
+
+function sanitizeValue(
+  value: unknown,
+  sensitiveFields: ReadonlySet<string>,
+  sensitiveValues: ReadonlySet<string>,
+  containerKey?: string,
+): unknown {
   if (Array.isArray(value)) {
     return value.map((item) =>
-      sanitizePersisted(item, sensitiveFields, sensitiveValues),
+      sanitizeValue(item, sensitiveFields, sensitiveValues, containerKey),
     );
   }
   if (value && typeof value === "object") {
     return Object.fromEntries(
       Object.entries(value).map(([key, item]) => [
         key,
-        SECRET_KEY.test(key) || sensitiveFields.has(key)
+        (SECRET_KEY.test(key) || sensitiveFields.has(key)) &&
+        !(
+          containerKey !== undefined &&
+          SCHEMA_CONTAINERS.has(containerKey) &&
+          isDeclarativeDefinition(item)
+        )
           ? "[REDACTED]"
-          : sanitizePersisted(item, sensitiveFields, sensitiveValues),
+          : sanitizeValue(item, sensitiveFields, sensitiveValues, key),
       ]),
     );
   }
@@ -35,6 +74,12 @@ export function sanitizePersisted(
     }
     return redacted;
   }
+  if (
+    (typeof value === "number" || typeof value === "boolean") &&
+    sensitiveValues.has(String(value))
+  ) {
+    return "[REDACTED]";
+  }
   return value;
 }
 
@@ -42,16 +87,36 @@ export class EvidenceWriter {
   public readonly runDirectory: string;
   public readonly relativeRunDirectory: string;
   private readonly eventsPath: string;
+  private readonly sensitiveFields: Set<string>;
+  private readonly sensitiveValues: Set<string>;
 
   public constructor(
     public readonly repositoryRoot: string,
     public readonly runId: string,
-    private readonly sensitiveFields: ReadonlySet<string> = new Set(),
-    private readonly sensitiveValues: ReadonlySet<string> = new Set(),
+    sensitiveFields: ReadonlySet<string> = new Set(),
+    sensitiveValues: ReadonlySet<string> = new Set(),
   ) {
+    this.sensitiveFields = new Set(sensitiveFields);
+    this.sensitiveValues = new Set(
+      [...sensitiveValues].flatMap((value) =>
+        sensitiveValueRepresentations(value),
+      ),
+    );
     this.relativeRunDirectory = path.posix.join("evidence", runId);
     this.runDirectory = path.join(repositoryRoot, "evidence", runId);
     this.eventsPath = path.join(this.runDirectory, "events.jsonl");
+  }
+
+  public addSensitiveFields(fields: Iterable<string>): void {
+    for (const field of fields) this.sensitiveFields.add(field);
+  }
+
+  public addSensitiveValues(values: Iterable<string | number | boolean>): void {
+    for (const value of values) {
+      for (const representation of sensitiveValueRepresentations(value)) {
+        this.sensitiveValues.add(representation);
+      }
+    }
   }
 
   public async initialize(): Promise<void> {
@@ -88,13 +153,24 @@ export class EvidenceWriter {
   }
 
   public async json(name: string, value: unknown): Promise<string> {
+    return (await this.jsonWithDigest(name, value)).path;
+  }
+
+  public async jsonWithDigest(
+    name: string,
+    value: unknown,
+  ): Promise<{ path: string; sha256: string }> {
     await this.initialize();
-    await writeFile(
-      this.absolutePath(name),
-      `${JSON.stringify(sanitizePersisted(value, this.sensitiveFields, this.sensitiveValues), null, 2)}\n`,
-      "utf8",
-    );
-    return this.relativePath(name);
+    const content = `${JSON.stringify(
+      sanitizePersisted(value, this.sensitiveFields, this.sensitiveValues),
+      null,
+      2,
+    )}\n`;
+    await writeFile(this.absolutePath(name), content, "utf8");
+    return {
+      path: this.relativePath(name),
+      sha256: createHash("sha256").update(content).digest("hex"),
+    };
   }
 
   public async text(name: string, value: string): Promise<string> {

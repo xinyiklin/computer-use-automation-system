@@ -1,34 +1,126 @@
 {
-  "url": "http://127.0.0.1:51827/backoffice/members/[REDACTED]/accounts/new/review",
+  "url": "http://127.0.0.1:49873/backoffice/members/[REDACTED]/accounts/new/review",
   "title": "Review new sub-account · Harborline CU Operations",
-  "visibleText": "Harborline CU Operations Member servicing workstation Training environment online SIMULATION ONLY — all members, accounts, and outcomes on this local application are synthetic. SUB-ACCOUNT PREPARATION Find member Review member Prepare account Review change Review new sub-account Verify the prepared values. Automated capability success ends on this page before confirmation. Ready for review No account has been created. Prepared account summary Member reference Member ••1001 Product code SAV_PLUS Product name Savings Plus Nickname Must Not Create Confirm account creation Edit details Harborline demonstration system · No real institution, member, or financial data.",
-  "semanticTree": "input[role=implicit] label=\"\" value=\"SAV_PLUS\" disabled=false\ninput[role=implicit] label=\"\" value=\"Must Not Create\" disabled=false\nbutton[role=implicit] label=\"\" value=\"\" disabled=false\na[role=implicit] label=\"\" value=\"\" disabled=false",
+  "visibleText": "Review new sub-account Verify the prepared values. Automated capability success ends on this page before confirmation. Ready for review No account has been created. Prepared account summary Member reference [REDACTED] Product code SAV_PLUS Product name Savings Plus Nickname Must Not Create Confirm account creation Edit details",
+  "semanticTree": "region=header h1[role=heading] name=\"Harborline CU OperationsMember servicing workstation\" value=\"\" disabled=false\nregion=navigation h2[role=heading] name=\"Sub-account preparation\" value=\"\" disabled=false\nregion=main h1[role=heading] name=\"Review new sub-account\" value=\"\" disabled=false\nregion=main h2[role=heading] name=\"Ready for review\" value=\"\" disabled=false\nregion=main h2[role=heading] name=\"Prepared account summary\" value=\"\" disabled=false\nregion=main th[role=rowheader] name=\"Member reference\" value=\"\" disabled=false\nregion=main td[role=cell] name=\"[REDACTED]\" value=\"\" disabled=false\nregion=main th[role=rowheader] name=\"Product code\" value=\"\" disabled=false\nregion=main td[role=cell] name=\"SAV_PLUS\" value=\"\" disabled=false\nregion=main th[role=rowheader] name=\"Product name\" value=\"\" disabled=false\nregion=main td[role=cell] name=\"Savings Plus\" value=\"\" disabled=false\nregion=main th[role=rowheader] name=\"Nickname\" value=\"\" disabled=false\nregion=main td[role=cell] name=\"Must Not Create\" value=\"\" disabled=false\nregion=main button[role=button] name=\"Confirm account creation\" value=\"\" disabled=false\nregion=main a[role=link] name=\"Edit details\" value=\"\" disabled=false",
   "controls": [
     {
-      "tag": "input",
-      "role": null,
-      "label": "",
-      "value": "SAV_PLUS",
-      "disabled": false
-    },
-    {
-      "tag": "input",
-      "role": null,
-      "label": "",
-      "value": "Must Not Create",
-      "disabled": false
-    },
-    {
-      "tag": "button",
-      "role": null,
-      "label": "",
+      "region": "header",
+      "tag": "h1",
+      "role": "heading",
+      "label": "Harborline CU OperationsMember servicing workstation",
       "value": "",
       "disabled": false
     },
     {
+      "region": "navigation",
+      "tag": "h2",
+      "role": "heading",
+      "label": "Sub-account preparation",
+      "value": "",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "h1",
+      "role": "heading",
+      "label": "Review new sub-account",
+      "value": "",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "h2",
+      "role": "heading",
+      "label": "Ready for review",
+      "value": "",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "h2",
+      "role": "heading",
+      "label": "Prepared account summary",
+      "value": "",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "th",
+      "role": "rowheader",
+      "label": "Member reference",
+      "value": "",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "td",
+      "role": "cell",
+      "label": "[REDACTED]",
+      "value": "",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "th",
+      "role": "rowheader",
+      "label": "Product code",
+      "value": "",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "td",
+      "role": "cell",
+      "label": "SAV_PLUS",
+      "value": "",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "th",
+      "role": "rowheader",
+      "label": "Product name",
+      "value": "",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "td",
+      "role": "cell",
+      "label": "Savings Plus",
+      "value": "",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "th",
+      "role": "rowheader",
+      "label": "Nickname",
+      "value": "",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "td",
+      "role": "cell",
+      "label": "Must Not Create",
+      "value": "",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "button",
+      "role": "button",
+      "label": "Confirm account creation",
+      "value": "",
+      "disabled": false
+    },
+    {
+      "region": "main",
       "tag": "a",
-      "role": null,
-      "label": "",
+      "role": "link",
+      "label": "Edit details",
       "value": "",
       "disabled": false
     }
