@@ -1,13 +1,38 @@
 {
-  "url": "http://127.0.0.1:51827/backoffice/members/[REDACTED]/accounts/new",
+  "url": "http://127.0.0.1:49873/backoffice/members/[REDACTED]/accounts/new",
   "title": "Permission denied · Harborline CU Operations",
-  "visibleText": "Harborline CU Operations Member servicing workstation Training environment online SIMULATION ONLY — all members, accounts, and outcomes on this local application are synthetic. SUB-ACCOUNT PREPARATION Find member Review member Prepare account Review change Permission denied This operator cannot prepare a new sub-account for Member ••4030. Stop and route the failure for review. Return to member details Harborline demonstration system · No real institution, member, or financial data.",
-  "semanticTree": "a[role=implicit] label=\"\" value=\"\" disabled=false",
+  "visibleText": "Permission denied This operator cannot prepare a new sub-account for [REDACTED]. Stop and route the failure for review. Return to member details",
+  "semanticTree": "region=header h1[role=heading] name=\"Harborline CU OperationsMember servicing workstation\" value=\"\" disabled=false\nregion=navigation h2[role=heading] name=\"Sub-account preparation\" value=\"\" disabled=false\nregion=main h1[role=heading] name=\"Permission denied\" value=\"\" disabled=false\nregion=main a[role=link] name=\"Return to member details\" value=\"\" disabled=false",
   "controls": [
     {
+      "region": "header",
+      "tag": "h1",
+      "role": "heading",
+      "label": "Harborline CU OperationsMember servicing workstation",
+      "value": "",
+      "disabled": false
+    },
+    {
+      "region": "navigation",
+      "tag": "h2",
+      "role": "heading",
+      "label": "Sub-account preparation",
+      "value": "",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "h1",
+      "role": "heading",
+      "label": "Permission denied",
+      "value": "",
+      "disabled": false
+    },
+    {
+      "region": "main",
       "tag": "a",
-      "role": null,
-      "label": "",
+      "role": "link",
+      "label": "Return to member details",
       "value": "",
       "disabled": false
     }

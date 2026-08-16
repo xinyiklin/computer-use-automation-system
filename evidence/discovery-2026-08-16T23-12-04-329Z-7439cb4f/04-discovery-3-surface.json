@@ -1,0 +1,83 @@
+{
+  "url": "http://127.0.0.1:4317/backoffice/members/[REDACTED]",
+  "title": "Member details · Harborline CU Operations",
+  "visibleText": "Member details Confirm the synthetic record before preparing a new sub-account. REFERENCE [REDACTED] NAME Avery Synthetic STATUS Active Current accounts Primary savings Open · synthetic balance hidden Membership share Open Open new sub-account",
+  "semanticTree": "region=header h1[role=heading] name=\"Harborline CU OperationsMember servicing workstation\" value=\"\" disabled=false\nregion=navigation h2[role=heading] name=\"Sub-account preparation\" value=\"\" disabled=false\nregion=main h1[role=heading] name=\"Member details\" value=\"\" disabled=false\nregion=main h2[role=heading] name=\"Current accounts\" value=\"\" disabled=false\nregion=main th[role=rowheader] name=\"Primary savings\" value=\"\" disabled=false\nregion=main td[role=cell] name=\"Open · synthetic balance hidden\" value=\"\" disabled=false\nregion=main th[role=rowheader] name=\"Membership share\" value=\"\" disabled=false\nregion=main td[role=cell] name=\"Open\" value=\"\" disabled=false\nregion=main a[role=link] name=\"Open new sub-account\" value=\"\" disabled=false",
+  "controls": [
+    {
+      "region": "header",
+      "tag": "h1",
+      "role": "heading",
+      "label": "Harborline CU OperationsMember servicing workstation",
+      "value": "",
+      "disabled": false
+    },
+    {
+      "region": "navigation",
+      "tag": "h2",
+      "role": "heading",
+      "label": "Sub-account preparation",
+      "value": "",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "h1",
+      "role": "heading",
+      "label": "Member details",
+      "value": "",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "h2",
+      "role": "heading",
+      "label": "Current accounts",
+      "value": "",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "th",
+      "role": "rowheader",
+      "label": "Primary savings",
+      "value": "",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "td",
+      "role": "cell",
+      "label": "Open · synthetic balance hidden",
+      "value": "",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "th",
+      "role": "rowheader",
+      "label": "Membership share",
+      "value": "",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "td",
+      "role": "cell",
+      "label": "Open",
+      "value": "",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "a",
+      "role": "link",
+      "label": "Open new sub-account",
+      "value": "",
+      "disabled": false
+    }
+  ],
+  "screenshotDataUrl": "[OMITTED_FROM_PERSISTED_SNAPSHOT]",
+  "screenshotPath": "evidence/discovery-2026-08-16T23-12-04-329Z-7439cb4f/04-discovery-3.png",
+  "stepCount": 4
+}

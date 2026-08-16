@@ -3,7 +3,7 @@ import path from "node:path";
 import type { CapabilityArtifact } from "./contracts.js";
 import { discoverCapability } from "./discovery.js";
 import { createDemoServer } from "./demo-app/server.js";
-import { EvidenceWriter } from "./evidence.js";
+import { EvidenceWriter, sanitizePersisted } from "./evidence.js";
 import type { InterventionRequest, Operator } from "./intervention.js";
 import { ScriptedModelClient } from "./model-client.js";
 import { createDefaultPolicy } from "./policy.js";
@@ -40,7 +40,11 @@ async function runReplay(
   );
   const origin = artifact.compatibility.allowedOrigins[0];
   if (!origin) throw new Error("Artifact origin is missing");
-  const policy = createDefaultPolicy(origin);
+  const policy = createDefaultPolicy(origin, {
+    sensitiveInputNames: Object.entries(artifact.inputSchema)
+      .filter(([, definition]) => definition.sensitive)
+      .map(([name]) => name),
+  });
   const surface = new PlaywrightSurfaceSession(evidence, policy);
   return await replayCapability({
     artifact,
@@ -55,13 +59,17 @@ async function runReplay(
 }
 
 class ScriptedOperator implements Operator {
+  public readonly executionKind = "scripted-test-double" as const;
   public constructor(private readonly surface: PlaywrightSurfaceSession) {}
-  public async takeControl(_request: InterventionRequest): Promise<void> {}
-  public async performManualAction(): Promise<string> {
+  public async takeControl(
+    _request: InterventionRequest,
+    _signal: AbortSignal,
+  ): Promise<void> {}
+  public async performManualAction(_signal: AbortSignal): Promise<string> {
     await this.surface.humanClick(CONTROLS.supervisorVerified, () => "human");
     return "Test operator selected the synthetic supervisor verification control; no field values recorded.";
   }
-  public async returnControl(): Promise<void> {}
+  public async returnControl(_signal: AbortSignal): Promise<void> {}
 }
 
 const demo = await createDemoServer();
@@ -116,7 +124,13 @@ try {
     new Set(["memberId"]),
     new Set(["M-1001"]),
   );
-  const discoveryPolicy = createDefaultPolicy(demo.origin);
+  const discoveryPolicy = createDefaultPolicy(demo.origin, {
+    sensitiveInputNames: Object.entries(discoveryRequest.inputs)
+      .filter(
+        ([, definition]) => "sensitive" in definition && definition.sensitive,
+      )
+      .map(([name]) => name),
+  });
   const discoverySurface = new PlaywrightSurfaceSession(
     discoveryEvidence,
     discoveryPolicy,
@@ -176,9 +190,15 @@ try {
       {
         id: "confirm-account",
         kind: "click",
-        description: "Attempt the final account creation for policy evidence.",
-        riskClass: "irreversible",
-        target: CONTROLS.confirm,
+        description: "Continue from the review screen.",
+        riskClass: "safe",
+        target: {
+          description: "Primary review action.",
+          robustnessNote:
+            "Generic metadata deliberately proves resolved-element policy enforcement.",
+          candidates: [{ kind: "css", selector: "button.danger" }],
+          expectedCardinality: 1,
+        },
       },
     ],
   };
@@ -194,12 +214,23 @@ try {
     serverConfirmAttempts: demo.state.confirmAttempts,
     results: { ...results, policyBlock },
   };
+  const sanitizedManifest = sanitizePersisted(
+    manifest,
+    new Set([
+      ...Object.entries(artifact.inputSchema)
+        .filter(([, definition]) => definition.sensitive)
+        .map(([name]) => name),
+      ...Object.entries(artifact.outputSchema)
+        .filter(([, definition]) => definition.sensitive)
+        .map(([name]) => name),
+    ]),
+  );
   await writeFile(
     path.join(repositoryRoot, "evidence", "manifest.json"),
-    `${JSON.stringify(manifest, null, 2)}\n`,
+    `${JSON.stringify(sanitizedManifest, null, 2)}\n`,
     "utf8",
   );
-  process.stdout.write(`${JSON.stringify(manifest, null, 2)}\n`);
+  process.stdout.write(`${JSON.stringify(sanitizedManifest, null, 2)}\n`);
 } finally {
   await demo.close();
 }

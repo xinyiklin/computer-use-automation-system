@@ -1,10 +1,10 @@
 import type { CapabilityArtifact, ControlRef } from "./contracts.js";
 
-function control(
+function control<const Candidates extends ControlRef["candidates"]>(
   description: string,
   robustnessNote: string,
-  candidates: ControlRef["candidates"],
-): ControlRef {
+  candidates: Candidates,
+): Omit<ControlRef, "candidates"> & { candidates: Candidates } {
   return { description, robustnessNote, candidates, expectedCardinality: 1 };
 }
 
@@ -216,7 +216,11 @@ export function createPrepareSubaccountArtifact(
       },
     },
     outputSchema: {
-      status: { type: "string", description: "Review readiness state." },
+      status: {
+        type: "string",
+        constant: "ready_for_review",
+        description: "Review readiness state.",
+      },
       memberReference: {
         type: "string",
         sensitive: true,

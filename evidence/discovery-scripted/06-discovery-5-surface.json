@@ -1,35 +1,71 @@
 {
-  "url": "http://127.0.0.1:51827/backoffice/members/[REDACTED]/accounts/new",
-  "title": "Prepare new sub-account · Harborline CU Operations",
-  "visibleText": "Harborline CU Operations Member servicing workstation Training environment online SIMULATION ONLY — all members, accounts, and outcomes on this local application are synthetic. SUB-ACCOUNT PREPARATION Find member Review member Prepare account Review change Prepare new sub-account Enter the requested values. This flow prepares a review only and does not create an account. REFERENCE Member ••1001 NAME Avery Synthetic Account details Product Select a product Savings Plus (SAV_PLUS) Money Market (MONEY_MARKET) Account nickname Synthetic label shown on the review screen. Review new sub-account Cancel Harborline demonstration system · No real institution, member, or financial data.",
-  "semanticTree": "select[role=implicit] label=\"Product\" value=\"SAV_PLUS\" disabled=false\ninput[role=implicit] label=\"Account nickname\" value=\"\" disabled=false\nbutton[role=implicit] label=\"\" value=\"\" disabled=false\na[role=implicit] label=\"\" value=\"\" disabled=false",
+  "url": "[WITHHELD_UNBOUND_SENSITIVE_OUTPUT]",
+  "title": "[WITHHELD_UNBOUND_SENSITIVE_OUTPUT]",
+  "visibleText": "[WITHHELD_UNBOUND_SENSITIVE_OUTPUT]",
+  "semanticTree": "region=header h1[role=heading] name=\"[WITHHELD]\" value=\"[WITHHELD]\" disabled=false\nregion=navigation h2[role=heading] name=\"[WITHHELD]\" value=\"[WITHHELD]\" disabled=false\nregion=main h1[role=heading] name=\"[WITHHELD]\" value=\"[WITHHELD]\" disabled=false\nregion=main h2[role=heading] name=\"[WITHHELD]\" value=\"[WITHHELD]\" disabled=false\nregion=main select[role=combobox] name=\"[WITHHELD]\" value=\"[WITHHELD]\" disabled=false\nregion=main input[role=textbox] name=\"[WITHHELD]\" value=\"[WITHHELD]\" disabled=false\nregion=main button[role=button] name=\"[WITHHELD]\" value=\"[WITHHELD]\" disabled=false\nregion=main a[role=link] name=\"[WITHHELD]\" value=\"[WITHHELD]\" disabled=false",
   "controls": [
     {
+      "region": "header",
+      "tag": "h1",
+      "role": "heading",
+      "label": "[WITHHELD]",
+      "value": "[WITHHELD]",
+      "disabled": false
+    },
+    {
+      "region": "navigation",
+      "tag": "h2",
+      "role": "heading",
+      "label": "[WITHHELD]",
+      "value": "[WITHHELD]",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "h1",
+      "role": "heading",
+      "label": "[WITHHELD]",
+      "value": "[WITHHELD]",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "h2",
+      "role": "heading",
+      "label": "[WITHHELD]",
+      "value": "[WITHHELD]",
+      "disabled": false
+    },
+    {
+      "region": "main",
       "tag": "select",
-      "role": null,
-      "label": "Product",
-      "value": "SAV_PLUS",
+      "role": "combobox",
+      "label": "[WITHHELD]",
+      "value": "[WITHHELD]",
       "disabled": false
     },
     {
+      "region": "main",
       "tag": "input",
-      "role": null,
-      "label": "Account nickname",
-      "value": "",
+      "role": "textbox",
+      "label": "[WITHHELD]",
+      "value": "[WITHHELD]",
       "disabled": false
     },
     {
+      "region": "main",
       "tag": "button",
-      "role": null,
-      "label": "",
-      "value": "",
+      "role": "button",
+      "label": "[WITHHELD]",
+      "value": "[WITHHELD]",
       "disabled": false
     },
     {
+      "region": "main",
       "tag": "a",
-      "role": null,
-      "label": "",
-      "value": "",
+      "role": "link",
+      "label": "[WITHHELD]",
+      "value": "[WITHHELD]",
       "disabled": false
     }
   ],

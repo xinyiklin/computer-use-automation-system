@@ -1,0 +1,33 @@
+{
+  "goalOrCapability": "prepare-subaccount",
+  "stepId": "open-new-sub-account",
+  "reason": "SUPERVISOR_VERIFICATION_REQUIRED",
+  "sanitizedState": {
+    "url": "http://127.0.0.1:4317/backoffice/members/[REDACTED]/accounts/new",
+    "title": "Supervisor verification required · Harborline CU Operations",
+    "visibleText": "Supervisor verification required A person must verify this synthetic member before account preparation can continue. Automation must pause and preserve this session. Supervisor verified"
+  },
+  "evidencePaths": [
+    "evidence/replay-2026-08-16T23-17-36-117Z-37f35130/01-intervention.png"
+  ],
+  "resumeCondition": {
+    "kind": "visible",
+    "target": {
+      "description": "prepare new sub-account heading",
+      "robustnessNote": "Stable heading proves the manual interstitial was cleared.",
+      "expectedCardinality": 1,
+      "candidates": [
+        {
+          "kind": "role",
+          "role": "heading",
+          "name": "Prepare new sub-account",
+          "exact": true
+        }
+      ]
+    }
+  },
+  "surfaceSessionId": "7bae5d15-1dec-407e-b144-95adf3d499ba",
+  "surfaceMode": "headed",
+  "requestId": "ea6019a0-887a-4c2d-bfc0-03c4f098d480",
+  "runId": "replay-2026-08-16T23-17-36-117Z-37f35130"
+}

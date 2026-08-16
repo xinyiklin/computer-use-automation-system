@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-13T22:14:14.424Z",
+  "generatedAt": "2026-08-16T23:20:18.466Z",
   "note": "All runs are local, synthetic, and key-free. discovery-scripted is explicitly a test-double run, not genuine LLM evidence.",
   "modelDecisionCallsDuringReplay": 0,
   "serverConfirmAttempts": 0,
@@ -11,7 +11,7 @@
       "capabilityId": "prepare-subaccount",
       "outputs": {
         "status": "ready_for_review",
-        "memberReference": "Member ••1002",
+        "memberReference": "[REDACTED]",
         "productCode": "MONEY_MARKET",
         "productName": "Money Market",
         "nickname": "Rainy Day"
@@ -29,7 +29,7 @@
       "capabilityId": "prepare-subaccount",
       "outputs": {
         "status": "ready_for_review",
-        "memberReference": "Member ••4290",
+        "memberReference": "[REDACTED]",
         "productCode": "SAV_PLUS",
         "productName": "Savings Plus",
         "nickname": "Recovery Sample"
@@ -74,7 +74,7 @@
       "capabilityId": "prepare-subaccount",
       "outputs": {
         "status": "ready_for_review",
-        "memberReference": "Member ••7000",
+        "memberReference": "[REDACTED]",
         "productCode": "SAV_PLUS",
         "productName": "Savings Plus",
         "nickname": "Supervisor Sample"
@@ -86,10 +86,9 @@
       "capabilityId": "prepare-subaccount",
       "error": {
         "category": "policy",
-        "code": "POLICY_RISK_BLOCKED",
-        "message": "Risk class is blocked: irreversible",
+        "code": "POLICY_CONTROL_BLOCKED",
+        "message": "Resolved control is independently blocked by configured policy",
         "stepId": "confirm-account",
-        "observed": "irreversible",
         "evidencePaths": [
           "evidence/replay-policy-block/01-failure.png"
         ]

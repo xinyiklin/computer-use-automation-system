@@ -1,4 +1,5 @@
 import type { ReplayResult } from "./contracts.js";
+import { sanitizePersisted } from "./evidence.js";
 
 export class AutomationError extends Error {
   public constructor(
@@ -25,33 +26,41 @@ export function failureResult(
   runId: string,
   capabilityId: string,
   error: unknown,
+  sanitization: {
+    sensitiveFields?: ReadonlySet<string>;
+    sensitiveValues?: ReadonlySet<string>;
+  } = {},
 ): ReplayResult {
   const normalized =
     error instanceof AutomationError
       ? error
       : new AutomationError(
           "UNEXPECTED_AUTOMATION_ERROR",
-          error instanceof Error ? error.message : "Unknown automation error",
+          "Automation failed because of an unexpected internal error",
         );
 
-  return {
-    status: "failure",
-    runId,
-    capabilityId,
-    error: {
-      category: normalized.category,
-      code: normalized.code,
-      message: normalized.message,
-      ...(normalized.context.stepId === undefined
-        ? {}
-        : { stepId: normalized.context.stepId }),
-      ...(normalized.context.expected === undefined
-        ? {}
-        : { expected: normalized.context.expected }),
-      ...(normalized.context.observed === undefined
-        ? {}
-        : { observed: normalized.context.observed }),
-      evidencePaths: normalized.context.evidencePaths ?? [],
+  return sanitizePersisted(
+    {
+      status: "failure",
+      runId,
+      capabilityId,
+      error: {
+        category: normalized.category,
+        code: normalized.code,
+        message: normalized.message,
+        ...(normalized.context.stepId === undefined
+          ? {}
+          : { stepId: normalized.context.stepId }),
+        ...(normalized.context.expected === undefined
+          ? {}
+          : { expected: normalized.context.expected }),
+        ...(normalized.context.observed === undefined
+          ? {}
+          : { observed: normalized.context.observed }),
+        evidencePaths: normalized.context.evidencePaths ?? [],
+      },
     },
-  };
+    sanitization.sensitiveFields,
+    sanitization.sensitiveValues,
+  ) as ReplayResult;
 }

@@ -1,35 +1,127 @@
 {
-  "url": "http://127.0.0.1:51827/backoffice/members/[REDACTED]/accounts/new/review",
-  "title": "Review new sub-account · Harborline CU Operations",
-  "visibleText": "Harborline CU Operations Member servicing workstation Training environment online SIMULATION ONLY — all members, accounts, and outcomes on this local application are synthetic. SUB-ACCOUNT PREPARATION Find member Review member Prepare account Review change Review new sub-account Verify the prepared values. Automated capability success ends on this page before confirmation. Ready for review No account has been created. Prepared account summary Member reference Member ••1001 Product code SAV_PLUS Product name Savings Plus Nickname Discovery Sample Confirm account creation Edit details Harborline demonstration system · No real institution, member, or financial data.",
-  "semanticTree": "input[role=implicit] label=\"\" value=\"SAV_PLUS\" disabled=false\ninput[role=implicit] label=\"\" value=\"Discovery Sample\" disabled=false\nbutton[role=implicit] label=\"\" value=\"\" disabled=false\na[role=implicit] label=\"\" value=\"\" disabled=false",
+  "url": "[WITHHELD_UNBOUND_SENSITIVE_OUTPUT]",
+  "title": "[WITHHELD_UNBOUND_SENSITIVE_OUTPUT]",
+  "visibleText": "[WITHHELD_UNBOUND_SENSITIVE_OUTPUT]",
+  "semanticTree": "region=header h1[role=heading] name=\"[WITHHELD]\" value=\"[WITHHELD]\" disabled=false\nregion=navigation h2[role=heading] name=\"[WITHHELD]\" value=\"[WITHHELD]\" disabled=false\nregion=main h1[role=heading] name=\"[WITHHELD]\" value=\"[WITHHELD]\" disabled=false\nregion=main h2[role=heading] name=\"[WITHHELD]\" value=\"[WITHHELD]\" disabled=false\nregion=main h2[role=heading] name=\"[WITHHELD]\" value=\"[WITHHELD]\" disabled=false\nregion=main th[role=rowheader] name=\"[WITHHELD]\" value=\"[WITHHELD]\" disabled=false\nregion=main td[role=cell] name=\"[WITHHELD]\" value=\"[WITHHELD]\" disabled=false\nregion=main th[role=rowheader] name=\"[WITHHELD]\" value=\"[WITHHELD]\" disabled=false\nregion=main td[role=cell] name=\"[WITHHELD]\" value=\"[WITHHELD]\" disabled=false\nregion=main th[role=rowheader] name=\"[WITHHELD]\" value=\"[WITHHELD]\" disabled=false\nregion=main td[role=cell] name=\"[WITHHELD]\" value=\"[WITHHELD]\" disabled=false\nregion=main th[role=rowheader] name=\"[WITHHELD]\" value=\"[WITHHELD]\" disabled=false\nregion=main td[role=cell] name=\"[WITHHELD]\" value=\"[WITHHELD]\" disabled=false\nregion=main button[role=button] name=\"[WITHHELD]\" value=\"[WITHHELD]\" disabled=false\nregion=main a[role=link] name=\"[WITHHELD]\" value=\"[WITHHELD]\" disabled=false",
   "controls": [
     {
-      "tag": "input",
-      "role": null,
-      "label": "",
-      "value": "SAV_PLUS",
+      "region": "header",
+      "tag": "h1",
+      "role": "heading",
+      "label": "[WITHHELD]",
+      "value": "[WITHHELD]",
       "disabled": false
     },
     {
-      "tag": "input",
-      "role": null,
-      "label": "",
-      "value": "Discovery Sample",
+      "region": "navigation",
+      "tag": "h2",
+      "role": "heading",
+      "label": "[WITHHELD]",
+      "value": "[WITHHELD]",
       "disabled": false
     },
     {
+      "region": "main",
+      "tag": "h1",
+      "role": "heading",
+      "label": "[WITHHELD]",
+      "value": "[WITHHELD]",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "h2",
+      "role": "heading",
+      "label": "[WITHHELD]",
+      "value": "[WITHHELD]",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "h2",
+      "role": "heading",
+      "label": "[WITHHELD]",
+      "value": "[WITHHELD]",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "th",
+      "role": "rowheader",
+      "label": "[WITHHELD]",
+      "value": "[WITHHELD]",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "td",
+      "role": "cell",
+      "label": "[WITHHELD]",
+      "value": "[WITHHELD]",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "th",
+      "role": "rowheader",
+      "label": "[WITHHELD]",
+      "value": "[WITHHELD]",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "td",
+      "role": "cell",
+      "label": "[WITHHELD]",
+      "value": "[WITHHELD]",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "th",
+      "role": "rowheader",
+      "label": "[WITHHELD]",
+      "value": "[WITHHELD]",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "td",
+      "role": "cell",
+      "label": "[WITHHELD]",
+      "value": "[WITHHELD]",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "th",
+      "role": "rowheader",
+      "label": "[WITHHELD]",
+      "value": "[WITHHELD]",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "td",
+      "role": "cell",
+      "label": "[WITHHELD]",
+      "value": "[WITHHELD]",
+      "disabled": false
+    },
+    {
+      "region": "main",
       "tag": "button",
-      "role": null,
-      "label": "",
-      "value": "",
+      "role": "button",
+      "label": "[WITHHELD]",
+      "value": "[WITHHELD]",
       "disabled": false
     },
     {
+      "region": "main",
       "tag": "a",
-      "role": null,
-      "label": "",
-      "value": "",
+      "role": "link",
+      "label": "[WITHHELD]",
+      "value": "[WITHHELD]",
       "disabled": false
     }
   ],

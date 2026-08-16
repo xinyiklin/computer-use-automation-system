@@ -1,14 +1,79 @@
 {
-  "url": "http://127.0.0.1:51827/backoffice/members/[REDACTED]",
-  "title": "Member details · Harborline CU Operations",
-  "visibleText": "Harborline CU Operations Member servicing workstation Training environment online SIMULATION ONLY — all members, accounts, and outcomes on this local application are synthetic. SUB-ACCOUNT PREPARATION Find member Review member Prepare account Review change Member details Confirm the synthetic record before preparing a new sub-account. REFERENCE Member ••1001 NAME Avery Synthetic STATUS Active Current accounts Primary savings Open · synthetic balance hidden Membership share Open Open new sub-account Harborline demonstration system · No real institution, member, or financial data.",
-  "semanticTree": "a[role=implicit] label=\"\" value=\"\" disabled=false",
+  "url": "[WITHHELD_UNBOUND_SENSITIVE_OUTPUT]",
+  "title": "[WITHHELD_UNBOUND_SENSITIVE_OUTPUT]",
+  "visibleText": "[WITHHELD_UNBOUND_SENSITIVE_OUTPUT]",
+  "semanticTree": "region=header h1[role=heading] name=\"[WITHHELD]\" value=\"[WITHHELD]\" disabled=false\nregion=navigation h2[role=heading] name=\"[WITHHELD]\" value=\"[WITHHELD]\" disabled=false\nregion=main h1[role=heading] name=\"[WITHHELD]\" value=\"[WITHHELD]\" disabled=false\nregion=main h2[role=heading] name=\"[WITHHELD]\" value=\"[WITHHELD]\" disabled=false\nregion=main th[role=rowheader] name=\"[WITHHELD]\" value=\"[WITHHELD]\" disabled=false\nregion=main td[role=cell] name=\"[WITHHELD]\" value=\"[WITHHELD]\" disabled=false\nregion=main th[role=rowheader] name=\"[WITHHELD]\" value=\"[WITHHELD]\" disabled=false\nregion=main td[role=cell] name=\"[WITHHELD]\" value=\"[WITHHELD]\" disabled=false\nregion=main a[role=link] name=\"[WITHHELD]\" value=\"[WITHHELD]\" disabled=false",
   "controls": [
     {
+      "region": "header",
+      "tag": "h1",
+      "role": "heading",
+      "label": "[WITHHELD]",
+      "value": "[WITHHELD]",
+      "disabled": false
+    },
+    {
+      "region": "navigation",
+      "tag": "h2",
+      "role": "heading",
+      "label": "[WITHHELD]",
+      "value": "[WITHHELD]",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "h1",
+      "role": "heading",
+      "label": "[WITHHELD]",
+      "value": "[WITHHELD]",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "h2",
+      "role": "heading",
+      "label": "[WITHHELD]",
+      "value": "[WITHHELD]",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "th",
+      "role": "rowheader",
+      "label": "[WITHHELD]",
+      "value": "[WITHHELD]",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "td",
+      "role": "cell",
+      "label": "[WITHHELD]",
+      "value": "[WITHHELD]",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "th",
+      "role": "rowheader",
+      "label": "[WITHHELD]",
+      "value": "[WITHHELD]",
+      "disabled": false
+    },
+    {
+      "region": "main",
+      "tag": "td",
+      "role": "cell",
+      "label": "[WITHHELD]",
+      "value": "[WITHHELD]",
+      "disabled": false
+    },
+    {
+      "region": "main",
       "tag": "a",
-      "role": null,
-      "label": "",
-      "value": "",
+      "role": "link",
+      "label": "[WITHHELD]",
+      "value": "[WITHHELD]",
       "disabled": false
     }
   ],

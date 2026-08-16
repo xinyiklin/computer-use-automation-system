@@ -3,9 +3,9 @@
   "stepId": "open-subaccount",
   "reason": "SUPERVISOR_VERIFICATION_REQUIRED",
   "sanitizedState": {
-    "url": "http://127.0.0.1:51827/backoffice/members/[REDACTED]/accounts/new",
+    "url": "http://127.0.0.1:49873/backoffice/members/[REDACTED]/accounts/new",
     "title": "Supervisor verification required · Harborline CU Operations",
-    "visibleText": "Harborline CU Operations Member servicing workstation Training environment online SIMULATION ONLY — all members, accounts, and outcomes on this local application are synthetic. SUB-ACCOUNT PREPARATION Find member Review member Prepare account Review change Supervisor verification required A person must verify this synthetic member before account preparation can continue. Automation must pause and preserve this session. Supervisor verified Harborline demonstration system · No real institution, member, or financial data."
+    "visibleText": "Supervisor verification required A person must verify this synthetic member before account preparation can continue. Automation must pause and preserve this session. Supervisor verified"
   },
   "evidencePaths": [
     "evidence/human-handoff-automated/01-intervention.png"
@@ -26,7 +26,8 @@
       ]
     }
   },
-  "surfaceSessionId": "462d1cbc-f0ac-4397-914f-3c9d740101a8",
-  "requestId": "17cf7ac6-c635-4f2a-8971-623a1e880a6a",
+  "surfaceSessionId": "3042fcb3-ff76-4246-9b00-dfb7d953cd41",
+  "surfaceMode": "headless",
+  "requestId": "8d82d126-9f3a-4e3f-aaf8-aa53124c9671",
   "runId": "human-handoff-automated"
 }

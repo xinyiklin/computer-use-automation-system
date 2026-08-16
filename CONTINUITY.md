@@ -7,12 +7,15 @@
 - Product scope: Product Brief v1 as amended by `CR001` v1 Option A, jointly approved by the user on 2026-08-13.
 - Delivery Plan: v2 jointly approved with exact response `APPROVE CR001 v1 OPTION A AND DELIVERY PLAN 001 v2` on 2026-08-13; it supersedes v1.
 - Implementation: approved baseline source, tests, documentation, and no-key evidence are complete.
-- Discovery-transport expansion implementation: not started; approved scope is the existing Responses API adapter plus explicitly selectable Codex CLI and Claude Code CLI adapters.
-- Verification: fresh local and clean-copy gates pass 23/23 tests; an independent verifier completed substantive inspection and found two defects, both fixed.
-- Independent post-fix confirmation: unverified because the verifier process did not return its requested final report after repeated finalize requests.
-- External evidence still required: one genuine explicitly selected-backend discovery run and one person-operated headed handoff.
-- No provider credentials were used while drafting or approving v2, so genuine discovery was not simulated or mislabeled.
+- Discovery-transport expansion implementation: transport slice implemented locally; approved scope is the existing Responses API adapter plus explicitly selectable Codex CLI and Claude Code CLI adapters.
+- Verification: fresh local and isolated clean-copy gates passed 93/93 tests on Node 24.19.0; no-key evidence regeneration passed with zero model replay decisions and zero confirmation attempts.
+- Independent post-fix confirmation: eleven earlier verifier passes surfaced sixty-six findings or limitations. Executable defects were remediated with focused regressions, including scalar-output scope, popup navigation, hard-deadline cleanup, live discovery identity, concrete transport attestation, exact persisted-byte replay provenance, caller sanitization, and cleanup independence. A twelfth, final exact-tree verifier found no application defects and passed assignment sections 3.1–3.7. The exact ignored planning artifacts remain unavailable in this clone, and the person-operated action is intentionally represented as a person-reported description plus independently observed same-session resume state.
+- Genuine discovery receipt: `evidence/discovery-2026-08-16T23-12-04-329Z-7439cb4f/` was produced by the explicitly selected, tool-disabled `codex-cli:gpt-5.6-luna` transport at xhigh with generic region-aware guidance, verified live identity, engine-owned value redaction, independently configured policy, and eight concrete external-process receipts from the registered built-in runner; its exact persisted-file-byte SHA-256 `6b579c4bb9e05826855f83ca91a18942af95c8f3cc466950e5d8e7322fd75a39` is linked to the model-free different-input replay `replay-2026-08-16T23-17-24-561Z-7432e8b8` with no raw sensitive member input.
+- Person-operated handoff receipt: `evidence/replay-2026-08-16T23-17-36-117Z-37f35130/` links the same exact file-byte digest and records `automation → human → automation`, trusted `person-operated-cli` execution on a headed surface, one unchanged surface-session ID, the person-reported description `Clicked "Supervisor verified"`, independently verified resume state, successful review output, and no confirmation action on the current source.
+- Required live evidence is present, including the exact-byte-bound discovery refresh without app-specific prompt landmarks; evidence curation and independent final verification are complete, while exact-head PR/CI and merge checks remain pending.
+- No provider credentials, raw transcripts, or real data were persisted; the genuine run used only the synthetic target and sanitized evidence.
 - `.agent-work/` remains local and ignored while the workflow is active.
+- The exact ignored Product Brief, Delivery Plan, and Alignment Review files are absent from this clone. Their approval/version record above is durable, but plan-to-implementation alignment must remain unverified unless the originals are restored.
 
 ## Implemented Baseline
 
@@ -20,26 +23,42 @@
 - Local server-rendered synthetic credit-union surface with deterministic success, not-found, transient, permission, and supervisor fixtures.
 - Strict declarative capability schema with typed I/O, ordered locator candidates, compatibility metadata, outcomes, recovery, checkpoints, and provenance.
 - Model-free Playwright replay with centralized policy, normalized results, masked screenshots, and append-only sanitized JSONL evidence.
-- One OpenAI Responses API discovery adapter plus a scripted no-key test double behind `ModelClient`.
+- Explicitly selectable OpenAI Responses API, Codex CLI, and Claude Code CLI discovery adapters plus a scripted no-key test double behind `ModelClient`.
 - Same-session ownership coordinator and manual headed CLI handoff seam.
+- Heading-aware headed discovery observations, post-action checkpoint guidance, bounded `--max-run-ms` override, and replay-safe evidence sanitization for declarative input schemas.
+- Region-aware semantic observations and code-enforced portability checks reject output locators or executable artifact behavior tied to one discovery run's values.
+- CLI origin authority is independently configured, known irreversible controls have a policy-owned backstop, and declared-sensitive outputs are redacted from persisted results.
+- Provider-bound observations redact declared sensitive values generically and withhold screenshots whenever a desired output is sensitive or sensitive input may have reached the page; discovery resolves and parses every declared output before emitting an artifact.
+- Model transports receive only the remaining discovery time budget and return sanitized runner receipts containing the process exit result, output source, and actual schema-validation result; output constants, parser types, and sensitivity metadata are contract-checked.
+- External CLI evidence is accepted only from module-registered adapters and runners and records concrete process ID, executable, argument digest, stdin digest, output source, exit result, and schema-validation result; caller-supplied clients remain test doubles.
+- Resolved DOM controls use the same checked element handle for interaction, ownership is re-checked after resolution, and every action receives the remaining hard wall-clock budget.
+- Runtime surface kind, application family, and variant are read from the live page and matched against the artifact before business actions.
+- Runtime identity is re-checked after every action and recovery, while the artifact-intersected policy remains active for click-triggered navigation throughout the session.
+- Discovery verifies the live surface identity and entry origin before subsequent observation or action; every navigation request, including pre-frame popup navigation, is policy checked and additional pages are closed and rejected.
+- Discovery and replay derive sensitive names and values inside the engine for direct API callers. Declared output targets and unmarked label-associated output values are redacted from semantic observations and masked in persisted screenshots; aggregate evidence is sanitized through the same field contract.
+- Resolved-control policy includes `aria-labelledby` names and every associated label; dynamically declared sensitive input names flow into surface masking.
+- Discovery `stuck` proposals carry a declarative resume condition and can use the same ownership coordinator and live-session operator seam as replay.
+- Portability checks cover compatibility metadata, executable structural fields, business-outcome details, and output locators while avoiding false positives from stable semantic labels; scalar outputs allow only labels or bounded relative leaf hints, never arbitrary CSS containers, and every scalar binding is checked against its own live extracted output. Parse failures never include the raw UI value.
+- Every nested input reference is declaration-checked; scalar output locators are also checked against invocation values, blank numeric outputs fail parsing, and sensitive primitive values redact under generic keys.
+- One abort-aware hard deadline owns browser startup, observation, conditions, runtime reads, output extraction, human callbacks, surface cancellation, and bounded cleanup. Deadline expiry returns without waiting for a hung operation or cancellation hook; late browser, context, and page creation is closed. Trusted declarative output bindings remain serializable while unvalidated sensitive proposals remain redacted.
+- Sensitive values are masked in controls and text nodes independently of DOM field names. Unbound sensitive discovery outputs force opaque provider state and a page-wide screenshot mask; validated replay outputs mask their resolved targets.
+- Artifact validation requires entry navigation before business actions and rejects the unimplemented `near` locator relation.
 - Root `README.md`, exact-heading `REPORT.md`, saved artifact, examples, and curated `/evidence/`.
 
 ## Verification Evidence
 
-- `npm run check`: formatting, strict typecheck, 7 test files, 23 tests passed.
+- `npm run check`: formatting, strict typecheck, 10 test files, 93 tests passed after the transport-attestation, exact-byte replay provenance, popup-policy, hard-deadline, scalar-output, engine-owned redaction, discovery-handoff, runtime-identity, same-element policy, caller-sanitization, cleanup-independence, and remaining-budget changes.
 - `npm run evidence:no-key`: scripted discovery and six replay/exception/handoff results generated; confirm attempts `0`.
 - Impeccable detector: no findings on `src/demo-app/pages.ts`.
 - Desktop, 390px mobile, and final review screenshots inspected.
-- Isolated clean copy: `npm ci`, `npx playwright install chromium`, `npm run check`, clean server, and documented no-key replay all passed.
+- Fresh isolated clean copy passed `npm ci`, formatting, strict typecheck, 10 test files, and 93/93 tests; its no-key evidence regeneration recorded zero model replay decisions and zero confirmation attempts.
 - Secret-shaped scan found only the deliberate redaction unit-test fixture.
 - `ASSIGNMENT.md` remains byte-identical at SHA-256 `524F18AB42E1C1D378ACD1F72797E90597084457A0FEBFAFC38073A2134EA955`.
 
 ## Immediate Next Actions
 
-1. Execute the approved Delivery Plan v2 offline phases, preserving the exact `ModelClient`/`AgentProposal` boundary, local policy enforcement, provider-independent replay, and no-key gates.
-2. After offline verification, run the approved genuine headed discovery with one explicit backend/model selection and provider-owned authentication, then replay its emitted artifact.
-3. Have the user perform the documented headed `M-7000` same-session handoff, then preserve the sanitized evidence.
-4. Obtain a fresh independent verification of the v2 implementation and all remaining external evidence, then update the reports; do not call the assignment fully complete before them.
+1. Commit and push the independently reviewed tree, then open the PR.
+2. Verify exact PR head, green CI, mergeability, and resolved review threads; merge only if all pass, then perform post-merge verification.
 
 ## Scope And Invariants
 

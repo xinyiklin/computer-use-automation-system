@@ -6,7 +6,18 @@ import type {
 import { AutomationPolicySchema } from "./contracts.js";
 import { AutomationError } from "./errors.js";
 
-export function createDefaultPolicy(origin: string): AutomationPolicy {
+export function createDefaultPolicy(
+  origin: string,
+  options: {
+    maxRunMs?: number;
+    sensitiveInputNames?: Iterable<string>;
+  } = {},
+): AutomationPolicy {
+  const sensitiveInputRules = Object.fromEntries(
+    [...new Set(["memberId", ...(options.sensitiveInputNames ?? [])])].map(
+      (name) => [name, "mask"],
+    ),
+  );
   return AutomationPolicySchema.parse({
     allowedOrigins: [origin],
     allowedRoutePatterns: [
@@ -25,10 +36,11 @@ export function createDefaultPolicy(origin: string): AutomationPolicy {
       "assert",
     ],
     maxSteps: 30,
-    maxRunMs: 120_000,
+    maxRunMs: options.maxRunMs ?? 120_000,
     allowedRiskClasses: ["safe", "reversible", "review_only"],
     blockedRiskClasses: ["irreversible", "credential", "external_navigation"],
-    sensitiveInputRules: { memberId: "mask" },
+    blockedControlPatterns: ["^confirm account creation$"],
+    sensitiveInputRules,
   });
 }
 
@@ -40,6 +52,35 @@ function routeAllowed(url: URL, policy: AutomationPolicy): boolean {
       return false;
     }
   });
+}
+
+function controlPatternBlocked(
+  values: readonly string[],
+  policy: AutomationPolicy,
+): boolean {
+  return policy.blockedControlPatterns.some((pattern) => {
+    let matcher: RegExp;
+    try {
+      matcher = new RegExp(pattern, "i");
+    } catch {
+      return true;
+    }
+    return values.some((value) => matcher.test(value));
+  });
+}
+
+export function assertResolvedControlAllowed(
+  values: readonly string[],
+  policy: AutomationPolicy,
+  stepId: string,
+): void {
+  if (!controlPatternBlocked(values, policy)) return;
+  throw new AutomationError(
+    "POLICY_CONTROL_BLOCKED",
+    "Resolved control is independently blocked by configured policy",
+    "policy",
+    { stepId },
+  );
 }
 
 export function assertUrlAllowed(
@@ -100,6 +141,38 @@ export function assertStepAllowed(
       { stepId: step.id, observed: step.riskClass },
     );
   }
+
+  if (
+    (step.kind === "click" || step.kind === "fill" || step.kind === "select") &&
+    controlPatternBlocked(
+      [
+        step.target.description,
+        ...step.target.candidates.flatMap((candidate) => {
+          switch (candidate.kind) {
+            case "role":
+              return [candidate.name];
+            case "label":
+            case "text":
+              return [candidate.text];
+            case "relative":
+              return [candidate.anchorText];
+            case "css":
+              return [candidate.selector];
+            case "coordinate":
+              return [];
+          }
+        }),
+      ],
+      policy,
+    )
+  ) {
+    throw new AutomationError(
+      "POLICY_CONTROL_BLOCKED",
+      "Control target is independently blocked by configured policy",
+      "policy",
+      { stepId: step.id, observed: step.target.description },
+    );
+  }
 }
 
 export function intersectArtifactPolicy(
@@ -119,5 +192,18 @@ export function intersectArtifactPolicy(
   return AutomationPolicySchema.parse({
     ...configured,
     allowedOrigins,
+  });
+}
+
+export function registerSensitiveInputRules(
+  policy: AutomationPolicy,
+  names: Iterable<string>,
+): AutomationPolicy {
+  return AutomationPolicySchema.parse({
+    ...policy,
+    sensitiveInputRules: {
+      ...policy.sensitiveInputRules,
+      ...Object.fromEntries([...names].map((name) => [name, "mask"])),
+    },
   });
 }
